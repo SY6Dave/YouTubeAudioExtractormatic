@@ -14,11 +14,9 @@ namespace YouTubeAudioExtractormatic
         [STAThread]
         static void Main()
         {
-            Downloader d = new Downloader();
-            d.BeginDownload("https://www.youtube.com/watch?v=KeN9c2GYJkk&index=16&list=PLeJzBLm_pENl17EXrq9lwuCOkvjdSBM79");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+            Application.Run(new frmMain(new ThreadHandler()));
         }
     }
 }

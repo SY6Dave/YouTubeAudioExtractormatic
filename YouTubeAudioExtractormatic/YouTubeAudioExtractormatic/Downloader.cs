@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using VideoLibrary;
 
@@ -41,6 +42,7 @@ namespace YouTubeAudioExtractormatic
 
         #endregion
 
+        ThreadHandler threadHandler;
         static string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
         string downloadsPath = Path.Combine(applicationPath, "Downloads");
         string ffmpegPath = Path.Combine(applicationPath, "lib\\ffmpeg.exe");
@@ -62,8 +64,11 @@ namespace YouTubeAudioExtractormatic
         /// <summary>
         /// Verifies that there is a directory set up for downloads
         /// </summary>
-        public Downloader()
+        /// <param name="threadHandler">The main program's thread manager</param>
+        public Downloader(ThreadHandler threadHandler)
         {
+            this.threadHandler = threadHandler;
+
             //check ffmpeg in right place
             if(!File.Exists(ffmpegPath))
             {
@@ -85,12 +90,31 @@ namespace YouTubeAudioExtractormatic
         }
 
         /// <summary>
-        /// Download a given YouTube video as an mp3 of a chosen bitrate (default: 320kbps)
+        /// Invoke a thread to download a given YouTube video as an mp3 of a chosen bitrate (default: 320kbps)
         /// </summary>
         /// <param name="url">Video URL</param>
         /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
-        public void BeginDownload(string url, uint bitrate = 320)
+        public void BeginDownloadThread(string url, uint bitrate = 320)
         {
+            object[] argsArray = {url, bitrate};
+            Thread downloadThread = new Thread(BeginDownload);
+            threadHandler.AddActive(downloadThread);
+            downloadThread.Start(argsArray);
+            Debug.WriteLine("done");
+        }
+
+        /// <summary>
+        /// Download a YouTube video based on the given url and bitrate in the object array
+        /// </summary>
+        /// <param name="threadArgs">An object array that must contain a string url and a uint32 bitrate</param>
+        private void BeginDownload(object threadArgs)
+        {
+            object[] argsArray = (object[])threadArgs;
+            string url;
+            uint bitrate;
+            url = (string)argsArray[0];
+            bitrate = (uint)argsArray[1];
+
             using(var cli = Client.For(new YouTube())) //use a libvideo client to get video metadata
             {
                 var downloadLinks = cli.GetAllVideos(url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
@@ -116,15 +140,23 @@ namespace YouTubeAudioExtractormatic
                         {
                             while (bytes.Length < len)
                             {
-                                var read = stream.Read(buffer, 0, buffer.Length);
-                                if (read > 0)
+                                try
                                 {
-                                    bytes.Write(buffer, 0, read);
-                                    DownloadProgress = (int)(bytes.Length * 100 / len);
+                                    var read = stream.Read(buffer, 0, buffer.Length);
+                                    if (read > 0)
+                                    {
+                                        bytes.Write(buffer, 0, read);
+                                        DownloadProgress = (int)(bytes.Length * 100 / len);
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
                                 }
-                                else
+                                catch
                                 {
-                                    break;
+                                    //thread aborted
+                                    return;
                                 }
                             }
 

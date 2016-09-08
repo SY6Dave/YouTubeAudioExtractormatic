@@ -12,8 +12,16 @@ namespace YouTubeAudioExtractormatic
 {
     public partial class frmMain : Form
     {
+        ThreadHandler threadHandler;
+
         public frmMain()
         {
+            InitializeComponent();
+        }
+
+        public frmMain(ThreadHandler threadHandler)
+        {
+            this.threadHandler = threadHandler;
             InitializeComponent();
         }
 
@@ -26,7 +34,12 @@ namespace YouTubeAudioExtractormatic
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            
+        }
 
+        private void frmMain_Closing(object sender, FormClosingEventArgs e)
+        {
+            threadHandler.AbortAllThreads();
         }
     }
 }
