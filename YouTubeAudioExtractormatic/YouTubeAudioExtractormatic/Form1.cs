@@ -10,11 +10,18 @@ using System.Windows.Forms;
 
 namespace YouTubeAudioExtractormatic
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
+        }
+
+        private void lblAuthor_Click(object sender, EventArgs e)
+        {
+            ToolStripLabel lblAuthor = (ToolStripLabel)sender;
+            System.Diagnostics.Process.Start(lblAuthor.Tag.ToString());
+            lblAuthor.LinkVisited = true;
         }
     }
 }
