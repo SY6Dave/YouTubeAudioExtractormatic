@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -10,23 +11,90 @@ using VideoLibrary;
 
 namespace YouTubeAudioExtractormatic
 {
-    public class Downloader
+    public class Downloader : INotifyPropertyChanged
     {
+        #region PropertyChangedEvents
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+                handler(this, e);
+        }
+
+        protected void OnDownloadProgressChanged(EventArgs e)
+        {
+            EventHandler handler = DownloadProgressChanged;
+            if (handler != null)
+                handler(this, e);
+
+            Debug.WriteLine(downloadProgress); //log current download percentage
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler DownloadProgressChanged;
+
+        #endregion
+
         static string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
         string downloadsPath = Path.Combine(applicationPath, "Downloads");
         string ffmpegPath = Path.Combine(applicationPath, "lib\\ffmpeg.exe");
-
-        public Downloader()
+        private int downloadProgress;
+        public int DownloadProgress
         {
-
+            get { return downloadProgress; }
+            set
+            {
+                if(value != downloadProgress)
+                {
+                    downloadProgress = value;
+                    OnPropertyChanged("DownloadProgress");
+                    OnDownloadProgressChanged(EventArgs.Empty);
+                }
+            }
         }
 
-        public void BeginDownload(string url)
+        /// <summary>
+        /// Verifies that there is a directory set up for downloads
+        /// </summary>
+        public Downloader()
         {
-            using(var cli = Client.For(new YouTube()))
+            //check ffmpeg in right place
+            if(!File.Exists(ffmpegPath))
             {
-                var downloadLinks = cli.GetAllVideos(url).OrderBy(br => -br.AudioBitrate);
-                var highestQuality = downloadLinks.First();
+                throw new FileNotFoundException("ffmpeg.exe not found in lib folder!");
+            }
+
+            //check if downloads folder is there and try to create it if not
+            if(!Directory.Exists(downloadsPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(downloadsPath);
+                }
+                catch
+                {
+                    throw new DirectoryNotFoundException("unable to create downloads directory!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Download a given YouTube video as an mp3 of a chosen bitrate (default: 320kbps)
+        /// </summary>
+        /// <param name="url">Video URL</param>
+        /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
+        public void BeginDownload(string url, uint bitrate = 320)
+        {
+            using(var cli = Client.For(new YouTube())) //use a libvideo client to get video metadata
+            {
+                var downloadLinks = cli.GetAllVideos(url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
+                var highestQuality = downloadLinks.First(); //grab best quality link
                 string videoPath = Path.Combine(downloadsPath, highestQuality.FullName);
 
                 //setup http web request to get video bytes
@@ -52,33 +120,43 @@ namespace YouTubeAudioExtractormatic
                                 if (read > 0)
                                 {
                                     bytes.Write(buffer, 0, read);
-                                    int downloadProgress = (int)(bytes.Length * 100 / len); //use this later
+                                    DownloadProgress = (int)(bytes.Length * 100 / len);
                                 }
                                 else
                                 {
                                     break;
                                 }
                             }
+
+                            //check integrity of byte array
                             if (bytes.Length != len)
                             {
                                 throw new WebException("File content is corrupted.");
                             }
                             else
                             {
-                                File.WriteAllBytes(videoPath, bytes.ToArray());
+                                File.WriteAllBytes(videoPath, bytes.ToArray()); //save temp video
                             }
                         }
                     }
                 }
 
                 string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
-                ToMp3(videoPath, audioPath);
-                File.Delete(videoPath);
+                ToMp3(videoPath, audioPath, bitrate); //convert to mp3
+                File.Delete(videoPath); //delete the temp video
             }
         }
 
+        /// <summary>
+        /// Convert a video file to an mp3 of a desired bitrate
+        /// </summary>
+        /// <param name="videoPath">The file path of the video</param>
+        /// <param name="audioPath">The file path to save the mp3</param>
+        /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
+        /// <returns>Returns true if the conversion was successful</returns>
         private bool ToMp3(string videoPath, string audioPath, uint bitrate = 320)
         {
+            //setup an ffmpeg process
             var ffmpeg = new Process
             {
                 StartInfo = { UseShellExecute = false, RedirectStandardError = true, FileName = ffmpegPath }
@@ -96,6 +174,7 @@ namespace YouTubeAudioExtractormatic
 
             try
             {
+                //try to invoke ffmpeg
                 if (!ffmpeg.Start())
                 {
                     return false;
@@ -104,12 +183,12 @@ namespace YouTubeAudioExtractormatic
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    Console.WriteLine(line);
+                    Console.WriteLine(line); //write out any messages
                 }
             }
             catch
             {
-                return false;
+                return false; //exception was thrown, conversion failed
             }
 
             ffmpeg.Close();
