@@ -239,7 +239,7 @@ namespace YouTubeAudioExtractormatic
 
                                         if (guiForm != null)
                                         {
-                                            guiForm.UpdateMsgLbl("Converting to mp3... Do not close any console windows that open!");
+                                            guiForm.UpdateMsgLbl("Converting to mp3... Do not close this window!");
                                         }
 
                                         ToMp3(tempVideo.Path, audioPath, bitrate); //convert to mp3
