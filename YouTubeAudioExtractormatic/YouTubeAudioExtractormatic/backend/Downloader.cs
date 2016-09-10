@@ -268,6 +268,7 @@ namespace YouTubeAudioExtractormatic
         /// <returns>Returns true if the conversion was successful</returns>
         private bool ToMp3(string videoPath, string audioPath, TimeSpan duration, uint bitrate = 320)
         {
+            Console.Clear();
             Console.WriteLine("Converting video to mp3 at a bitrate of {0}kbit/s", bitrate);
             //setup an ffmpeg process
             var ffmpeg = new Process
