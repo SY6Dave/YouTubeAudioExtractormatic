@@ -28,7 +28,9 @@ namespace YouTubeAudioExtractormatic
         private void lblAuthor_Click(object sender, EventArgs e)
         {
             ToolStripLabel lblAuthor = (ToolStripLabel)sender;
-            System.Diagnostics.Process.Start(lblAuthor.Tag.ToString());
+            Downloader d = new Downloader(threadHandler);
+            d.BeginDownloadThread("https://www.youtube.com/watch?v=PR_u9rvFKzE");
+            //System.Diagnostics.Process.Start(lblAuthor.Tag.ToString());
             lblAuthor.LinkVisited = true;
         }
 

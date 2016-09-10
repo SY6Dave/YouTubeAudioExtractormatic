@@ -167,15 +167,17 @@ namespace YouTubeAudioExtractormatic
                             }
                             else
                             {
-                                File.WriteAllBytes(videoPath, bytes.ToArray()); //save temp video
+                                //create temp video file to convert to mp3 and dispose of when done
+                                using(var tempVideo = new TempFile())
+                                {
+                                    File.WriteAllBytes(tempVideo.Path, bytes.ToArray());
+                                    string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
+                                    ToMp3(tempVideo.Path, audioPath, bitrate); //convert to mp3
+                                }
                             }
                         }
                     }
                 }
-
-                string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
-                ToMp3(videoPath, audioPath, bitrate); //convert to mp3
-                File.Delete(videoPath); //delete the temp video
             }
         }
 
