@@ -87,8 +87,11 @@ namespace YouTubeAudioExtractormatic
                 catch
                 {
                     lblMsg.Text = "Unable to create downloads directory!";
+                    return;
                 }
             }
+
+            System.Diagnostics.Process.Start(downloader.DownloadsPath);
         }
 
         private void btnPaste_Click(object sender, EventArgs e)
