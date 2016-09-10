@@ -82,7 +82,14 @@ namespace YouTubeAudioExtractormatic
             //check ffmpeg in right place
             if(!File.Exists(ffmpegPath))
             {
-                throw new FileNotFoundException("ffmpeg.exe not found in lib folder!");
+                if (guiForm != null)
+                {
+                    guiForm.UpdateMsgLbl("ffmpeg.exe not found in lib folder!");
+                }
+                else
+                {
+                    throw new FileNotFoundException("ffmpeg.exe not found in lib folder!");
+                }
             }
 
             //check if downloads folder is there and try to create it if not
@@ -94,7 +101,14 @@ namespace YouTubeAudioExtractormatic
                 }
                 catch
                 {
-                    throw new DirectoryNotFoundException("unable to create downloads directory!");
+                    if (guiForm != null)
+                    {
+                        guiForm.UpdateMsgLbl("Unable to create downloads directory!");
+                    }
+                    else
+                    {
+                        throw new DirectoryNotFoundException("Unable to create downloads directory!");
+                    }
                 }
             }
         }
@@ -108,8 +122,7 @@ namespace YouTubeAudioExtractormatic
         {
             if(!Directory.Exists(downloadsPath))
             {
-                if (guiForm != null) guiForm.UpdateMsgLbl("Could not find downloads folder! Please restart the application");
-                return;
+                Directory.CreateDirectory(downloadsPath);
             }
 
             object[] argsArray = {url, bitrate};
@@ -194,7 +207,16 @@ namespace YouTubeAudioExtractormatic
                             //check integrity of byte array
                             if (bytes.Length != len)
                             {
-                                throw new WebException("File content is corrupted.");
+                                if(guiForm != null)
+                                {
+                                    guiForm.UpdateMsgLbl("File content is corrupted!");
+                                    threadHandler.RemoveActive(Thread.CurrentThread);
+                                    Thread.CurrentThread.Abort();
+                                }
+                                else
+                                {
+                                    throw new WebException("File content is corrupted.");
+                                }
                             }
                             else
                             {

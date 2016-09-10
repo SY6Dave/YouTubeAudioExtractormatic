@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,13 +78,16 @@ namespace YouTubeAudioExtractormatic
 
         private void lblOpen_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            try
+            if(!Directory.Exists(downloader.DownloadsPath))
             {
-                System.Diagnostics.Process.Start(downloader.DownloadsPath);
-            }
-            catch(Win32Exception)
-            {
-                lblMsg.Text = "Could not find downloads folder! Please restart the application";
+                try
+                {
+                    Directory.CreateDirectory(downloader.DownloadsPath);
+                }
+                catch
+                {
+                    lblMsg.Text = "Unable to create downloads directory!";
+                }
             }
         }
 
@@ -107,6 +111,11 @@ namespace YouTubeAudioExtractormatic
             {
                 lblMsg.Text = text;
             }
+        }
+
+        private void frmMain_Activated(object sender, EventArgs e)
+        {
+            txtUrl.Text = Clipboard.GetText();
         }
     }
 }
