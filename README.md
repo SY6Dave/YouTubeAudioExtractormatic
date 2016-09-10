@@ -3,7 +3,7 @@ Download playlists from YouTube as high quality mp3s. WIP upgrade of my previous
 
 ##Libraries
 * FFMPeg - Licensed under GPLv2
-* libvideo - Licensed under BSD 2-Clause
+* libvideo - Licensed under BSD 2-Clause - [read the libvideo license here] (https://github.com/jamesqo/libvideo/blob/master/bsd.license)
 
 ##License
 Because this application uses a library licensed under BSD 2-Clause, so must this be. [Read it here] (https://github.com/SY6Dave/YouTubeAudioExtractormatic/blob/master/License.md)
