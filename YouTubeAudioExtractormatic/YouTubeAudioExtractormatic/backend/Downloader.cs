@@ -235,6 +235,7 @@ namespace YouTubeAudioExtractormatic
                                     using (var tempVideo = new TempFile())
                                     {
                                         File.WriteAllBytes(tempVideo.Path, bytes.ToArray());
+                                        TimeSpan duration = GetVideoDuration(tempVideo.Path);
                                         string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
 
                                         if (guiForm != null)
@@ -242,7 +243,7 @@ namespace YouTubeAudioExtractormatic
                                             guiForm.UpdateMsgLbl("Converting to mp3... Do not close this window!");
                                         }
 
-                                        ToMp3(tempVideo.Path, audioPath, bitrate); //convert to mp3
+                                        ToMp3(tempVideo.Path, audioPath, duration, bitrate); //convert to mp3
 
                                         if (guiForm != null)
                                         {
@@ -262,10 +263,12 @@ namespace YouTubeAudioExtractormatic
         /// </summary>
         /// <param name="videoPath">The file path of the video</param>
         /// <param name="audioPath">The file path to save the mp3</param>
+        /// /// <param name="duration">The duration of the video file. Used to calculate progress</param>
         /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
         /// <returns>Returns true if the conversion was successful</returns>
-        private bool ToMp3(string videoPath, string audioPath, uint bitrate = 320)
+        private bool ToMp3(string videoPath, string audioPath, TimeSpan duration, uint bitrate = 320)
         {
+            Console.WriteLine("Converting video to mp3 at a bitrate of {0}kbit/s", bitrate);
             //setup an ffmpeg process
             var ffmpeg = new Process
             {
@@ -287,22 +290,99 @@ namespace YouTubeAudioExtractormatic
                 //try to invoke ffmpeg
                 if (!ffmpeg.Start())
                 {
+                    Console.WriteLine("Unable to start ffmpeg!");
                     return false;
                 }
                 var reader = ffmpeg.StandardError;
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    Console.WriteLine(line); //write out any messages
+                    //get the line saying the time - use this to calculate percentage
+                    if(line.Contains("time="))
+                    {
+                        string[] lineSplit = line.Split(' ');
+                        foreach(string part in lineSplit)
+                        {
+                            if(part.Contains("time="))
+                            {
+                                TimeSpan timeConverted = TimeSpan.Parse(part.Replace("time=", ""));
+                                double percentage = ((double)timeConverted.Ticks / (double)duration.Ticks) * 100;
+                                Console.WriteLine((int)percentage + "%");
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine("An error occurred while converting\n\n{0}", e.Message);
                 return false; //exception was thrown, conversion failed
             }
 
             ffmpeg.Close();
+
+            Console.WriteLine("Converted!");
             return true;
+        }
+
+        /// <summary>
+        /// Get the duration of a given video
+        /// </summary>
+        /// <param name="videoPath">The path of the video file</param>
+        /// <returns></returns>
+        private TimeSpan GetVideoDuration(string videoPath)
+        {
+            //setup an ffmpeg process
+            var ffmpeg = new Process
+            {
+                StartInfo = { UseShellExecute = false, RedirectStandardError = true, FileName = ffmpegPath }
+            };
+
+            var arguments =
+                String.Format(
+                    @"-i ""{0}""",
+                    videoPath
+                );
+
+            ffmpeg.StartInfo.Arguments = arguments;
+
+            try
+            {
+                //try to invoke ffmpeg
+                if (!ffmpeg.Start())
+                {
+                    return TimeSpan.Zero;
+                }
+                var reader = ffmpeg.StandardError;
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    //get the line which shows the duration, parse it and return
+                    if (line.Contains("Duration: "))
+                    {
+                        string[] lineSplit = line.Split(' ');
+                        for (int i = 0; i < lineSplit.Length; i++)
+                        {
+                            string part = lineSplit[i];
+                            if (part.Contains("Duration:"))
+                            {
+                                part = lineSplit[++i];
+                                part = part.Replace(",", "");
+                                ffmpeg.Close();
+                                return TimeSpan.Parse(part);
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return TimeSpan.Zero; //exception was thrown, conversion failed
+            }
+
+            ffmpeg.Close();
+            return TimeSpan.Zero;
         }
     }
 }
