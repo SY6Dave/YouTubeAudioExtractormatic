@@ -100,11 +100,11 @@ namespace YouTubeAudioExtractormatic
         }
 
         /// <summary>
-        /// Invoke a thread to download a given YouTube video as an mp3 of a chosen bitrate (default: 320kbps)
+        /// Invoke a thread to download a given YouTube video (or as an mp3 if provided with a bitrate)
         /// </summary>
         /// <param name="url">Video URL</param>
         /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
-        public void BeginDownloadThread(string url, uint bitrate = 320)
+        public void BeginDownloadThread(string url, uint bitrate = 0)
         {
             if(!Directory.Exists(downloadsPath))
             {
@@ -149,9 +149,8 @@ namespace YouTubeAudioExtractormatic
                     threadHandler.RemoveActive(Thread.CurrentThread);
                     Thread.CurrentThread.Abort();
                 }
-                
+
                 var highestQuality = downloadLinks.First(); //grab best quality link
-                string videoPath = Path.Combine(downloadsPath, highestQuality.FullName);
 
                 //setup http web request to get video bytes
                 var request = (HttpWebRequest)HttpWebRequest.Create(highestQuality.Uri);
@@ -199,22 +198,34 @@ namespace YouTubeAudioExtractormatic
                             }
                             else
                             {
-                                //create temp video file to convert to mp3 and dispose of when done
-                                using(var tempVideo = new TempFile())
+                                if(bitrate == 0) //video
                                 {
-                                    File.WriteAllBytes(tempVideo.Path, bytes.ToArray());
-                                    string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
-
-                                    if (guiForm != null)
-                                    {
-                                        guiForm.UpdateMsgLbl("Converting to mp3... Do not close any console windows that open!");
-                                    }
-
-                                    ToMp3(tempVideo.Path, audioPath, bitrate); //convert to mp3
-
+                                    string videoPath = Path.Combine(downloadsPath, highestQuality.FullName);
+                                    File.WriteAllBytes(videoPath, bytes.ToArray());
                                     if (guiForm != null)
                                     {
                                         guiForm.UpdateMsgLbl("Successful!");
+                                    }
+                                }
+                                else //mp3
+                                {
+                                    //create temp video file to convert to mp3 and dispose of when done
+                                    using (var tempVideo = new TempFile())
+                                    {
+                                        File.WriteAllBytes(tempVideo.Path, bytes.ToArray());
+                                        string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
+
+                                        if (guiForm != null)
+                                        {
+                                            guiForm.UpdateMsgLbl("Converting to mp3... Do not close any console windows that open!");
+                                        }
+
+                                        ToMp3(tempVideo.Path, audioPath, bitrate); //convert to mp3
+
+                                        if (guiForm != null)
+                                        {
+                                            guiForm.UpdateMsgLbl("Successful!");
+                                        }
                                     }
                                 }
                             }

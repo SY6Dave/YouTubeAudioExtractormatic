@@ -48,18 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Downloader.cs" />
-    <Compile Include="frmMain.cs">
+    <Compile Include="backend\Downloader.cs" />
+    <Compile Include="frontend\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMain.Designer.cs">
+    <Compile Include="frontend\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TempFile.cs" />
-    <Compile Include="ThreadHandler.cs" />
-    <EmbeddedResource Include="frmMain.resx">
+    <Compile Include="backend\TempFile.cs" />
+    <Compile Include="backend\ThreadHandler.cs" />
+    <EmbeddedResource Include="frontend\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

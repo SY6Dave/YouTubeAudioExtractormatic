@@ -30,6 +30,7 @@
         {
             this.ssMain = new System.Windows.Forms.StatusStrip();
             this.lblAuthor = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtUrl = new System.Windows.Forms.TextBox();
             this.btnDownload = new System.Windows.Forms.Button();
             this.rb96 = new System.Windows.Forms.RadioButton();
@@ -40,8 +41,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lblOpen = new System.Windows.Forms.LinkLabel();
             this.btnPaste = new System.Windows.Forms.Button();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblMsg = new System.Windows.Forms.Label();
+            this.rbVideo = new System.Windows.Forms.RadioButton();
             this.ssMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +70,14 @@
             this.lblAuthor.Text = "© David Mortiboy 2016";
             this.lblAuthor.Click += new System.EventHandler(this.lblAuthor_Click);
             // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(441, 17);
+            this.toolStripStatusLabel1.Text = "Note: This GUI is in pre-pre-pre-alpha state and doesn\'t represent the final prod" +
+    "uct";
+            // 
             // txtUrl
             // 
             this.txtUrl.Location = new System.Drawing.Point(175, 45);
@@ -78,7 +87,7 @@
             // 
             // btnDownload
             // 
-            this.btnDownload.Location = new System.Drawing.Point(35, 263);
+            this.btnDownload.Location = new System.Drawing.Point(35, 286);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(75, 23);
             this.btnDownload.TabIndex = 2;
@@ -89,7 +98,7 @@
             // rb96
             // 
             this.rb96.AutoSize = true;
-            this.rb96.Location = new System.Drawing.Point(34, 84);
+            this.rb96.Location = new System.Drawing.Point(34, 122);
             this.rb96.Name = "rb96";
             this.rb96.Size = new System.Drawing.Size(110, 17);
             this.rb96.TabIndex = 3;
@@ -100,7 +109,7 @@
             // rb128
             // 
             this.rb128.AutoSize = true;
-            this.rb128.Location = new System.Drawing.Point(34, 118);
+            this.rb128.Location = new System.Drawing.Point(34, 156);
             this.rb128.Name = "rb128";
             this.rb128.Size = new System.Drawing.Size(102, 17);
             this.rb128.TabIndex = 4;
@@ -111,7 +120,7 @@
             // rb192
             // 
             this.rb192.AutoSize = true;
-            this.rb192.Location = new System.Drawing.Point(34, 151);
+            this.rb192.Location = new System.Drawing.Point(34, 189);
             this.rb192.Name = "rb192";
             this.rb192.Size = new System.Drawing.Size(119, 17);
             this.rb192.TabIndex = 5;
@@ -123,7 +132,7 @@
             // 
             this.rb256.AutoSize = true;
             this.rb256.Checked = true;
-            this.rb256.Location = new System.Drawing.Point(34, 184);
+            this.rb256.Location = new System.Drawing.Point(34, 222);
             this.rb256.Name = "rb256";
             this.rb256.Size = new System.Drawing.Size(104, 17);
             this.rb256.TabIndex = 6;
@@ -135,7 +144,7 @@
             // rb320
             // 
             this.rb320.AutoSize = true;
-            this.rb320.Location = new System.Drawing.Point(35, 216);
+            this.rb320.Location = new System.Drawing.Point(35, 254);
             this.rb320.Name = "rb320";
             this.rb320.Size = new System.Drawing.Size(118, 17);
             this.rb320.TabIndex = 7;
@@ -173,14 +182,6 @@
             this.btnPaste.UseVisualStyleBackColor = true;
             this.btnPaste.Click += new System.EventHandler(this.btnPaste_Click);
             // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(441, 17);
-            this.toolStripStatusLabel1.Text = "Note: This GUI is in pre-pre-pre-alpha state and doesn\'t represent the final prod" +
-    "uct";
-            // 
             // lblMsg
             // 
             this.lblMsg.AutoSize = true;
@@ -189,12 +190,24 @@
             this.lblMsg.Size = new System.Drawing.Size(0, 13);
             this.lblMsg.TabIndex = 11;
             // 
+            // rbVideo
+            // 
+            this.rbVideo.AutoSize = true;
+            this.rbVideo.Location = new System.Drawing.Point(35, 90);
+            this.rbVideo.Name = "rbVideo";
+            this.rbVideo.Size = new System.Drawing.Size(93, 17);
+            this.rbVideo.TabIndex = 12;
+            this.rbVideo.Text = "Save as video";
+            this.rbVideo.UseVisualStyleBackColor = true;
+            this.rbVideo.CheckedChanged += new System.EventHandler(this.rbVideo_CheckedChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.ClientSize = new System.Drawing.Size(608, 446);
+            this.Controls.Add(this.rbVideo);
             this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.btnPaste);
             this.Controls.Add(this.lblOpen);
@@ -235,6 +248,7 @@
         private System.Windows.Forms.LinkLabel lblOpen;
         private System.Windows.Forms.Button btnPaste;
         private System.Windows.Forms.Label lblMsg;
+        private System.Windows.Forms.RadioButton rbVideo;
     }
 }
 

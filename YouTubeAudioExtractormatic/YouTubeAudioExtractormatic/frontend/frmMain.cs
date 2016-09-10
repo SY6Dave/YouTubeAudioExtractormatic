@@ -70,6 +70,11 @@ namespace YouTubeAudioExtractormatic
             selectedBitrate = 320;
         }
 
+        private void rbVideo_CheckedChanged(object sender, EventArgs e)
+        {
+            selectedBitrate = 0;
+        }
+
         private void lblOpen_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
