@@ -35,6 +35,10 @@ namespace YouTubeAudioExtractormatic
                 handler(this, e);
 
             Debug.WriteLine(downloadProgress); //log current download percentage
+            if(guiForm != null)
+            {
+                guiForm.UpdateMsgLbl(downloadProgress + "% downloaded...");
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,6 +49,10 @@ namespace YouTubeAudioExtractormatic
         ThreadHandler threadHandler;
         static string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
         string downloadsPath = Path.Combine(applicationPath, "Downloads");
+        public string DownloadsPath
+        {
+            get { return downloadsPath; }
+        }
         string ffmpegPath = Path.Combine(applicationPath, "lib\\ffmpeg.exe");
         private int downloadProgress;
         public int DownloadProgress
@@ -60,14 +68,16 @@ namespace YouTubeAudioExtractormatic
                 }
             }
         }
+        private frmMain guiForm;
 
         /// <summary>
         /// Verifies that there is a directory set up for downloads
         /// </summary>
         /// <param name="threadHandler">The main program's thread manager</param>
-        public Downloader(ThreadHandler threadHandler)
+        public Downloader(ThreadHandler threadHandler, frmMain callingForm)
         {
             this.threadHandler = threadHandler;
+            this.guiForm = callingForm;
 
             //check ffmpeg in right place
             if(!File.Exists(ffmpegPath))
@@ -96,11 +106,16 @@ namespace YouTubeAudioExtractormatic
         /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
         public void BeginDownloadThread(string url, uint bitrate = 320)
         {
+            if(!Directory.Exists(downloadsPath))
+            {
+                if (guiForm != null) guiForm.UpdateMsgLbl("Could not find downloads folder! Please restart the application");
+                return;
+            }
+
             object[] argsArray = {url, bitrate};
             Thread downloadThread = new Thread(BeginDownload);
             threadHandler.AddActive(downloadThread);
             downloadThread.Start(argsArray);
-            Debug.WriteLine("done");
         }
 
         /// <summary>
@@ -117,7 +132,24 @@ namespace YouTubeAudioExtractormatic
 
             using(var cli = Client.For(new YouTube())) //use a libvideo client to get video metadata
             {
-                var downloadLinks = cli.GetAllVideos(url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
+                IEnumerable<YouTubeVideo> downloadLinks  = null;
+
+                try
+                {
+                    downloadLinks = cli.GetAllVideos(url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
+                }
+                catch(ArgumentException)
+                {
+                    //invalid url
+                    if(guiForm != null)
+                    {
+                        guiForm.UpdateMsgLbl("Invalid URL!");
+                    }
+
+                    threadHandler.RemoveActive(Thread.CurrentThread);
+                    Thread.CurrentThread.Abort();
+                }
+                
                 var highestQuality = downloadLinks.First(); //grab best quality link
                 string videoPath = Path.Combine(downloadsPath, highestQuality.FullName);
 
@@ -172,7 +204,18 @@ namespace YouTubeAudioExtractormatic
                                 {
                                     File.WriteAllBytes(tempVideo.Path, bytes.ToArray());
                                     string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
+
+                                    if (guiForm != null)
+                                    {
+                                        guiForm.UpdateMsgLbl("Converting to mp3... Do not close any console windows that open!");
+                                    }
+
                                     ToMp3(tempVideo.Path, audioPath, bitrate); //convert to mp3
+
+                                    if (guiForm != null)
+                                    {
+                                        guiForm.UpdateMsgLbl("Successful!");
+                                    }
                                 }
                             }
                         }
@@ -198,7 +241,7 @@ namespace YouTubeAudioExtractormatic
 
             var arguments =
                 String.Format(
-                    @"-i ""{0}"" -b:a {1}K -vn ""{2}""",
+                    @"-y -i ""{0}"" -b:a {1}K -vn ""{2}""",
                     videoPath,
                     bitrate,
                     audioPath
