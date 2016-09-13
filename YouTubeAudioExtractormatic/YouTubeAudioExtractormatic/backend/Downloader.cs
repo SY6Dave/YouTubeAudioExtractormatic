@@ -125,6 +125,9 @@ namespace YouTubeAudioExtractormatic
                 Directory.CreateDirectory(downloadsPath);
             }
 
+            UrlParser urlParser = new UrlParser(url);
+            url = urlParser.Url;
+
             object[] argsArray = {url, bitrate};
             Thread downloadThread = new Thread(BeginDownload);
             threadHandler.AddActive(downloadThread);

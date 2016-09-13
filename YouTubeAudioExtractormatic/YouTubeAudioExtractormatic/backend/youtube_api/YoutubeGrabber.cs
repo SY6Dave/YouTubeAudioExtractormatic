@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Apis.YouTube.v3;
 using Google.Apis.Services;
+using System.Diagnostics;
 
 namespace YouTubeAudioExtractormatic
 {
@@ -28,6 +29,34 @@ namespace YouTubeAudioExtractormatic
             });
 
             this.youtubeService = ys;
+
+            if (!TestConnection()) throw new ArgumentException("api key invalid");
+        }
+
+        private bool TestConnection()
+        {
+            var searchRequest = youtubeService.Search.List("snippet");
+            searchRequest.Q = "cat";
+            searchRequest.MaxResults = 5;
+
+            try
+            {
+                var searchResponse = searchRequest.Execute();
+                foreach (var searchItem in searchResponse.Items)
+                {
+                    if (searchItem.Id.VideoId != null)
+                    {
+                        Debug.WriteLine(searchItem.Snippet.Title);
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                //something went wrong
+                return false;
+            }
         }
     }
 }

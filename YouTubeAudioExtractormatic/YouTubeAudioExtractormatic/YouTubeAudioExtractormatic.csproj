@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="backend\Downloader.cs" />
+    <Compile Include="backend\UrlParser.cs" />
     <Compile Include="backend\youtube_api\YoutubeGrabber.cs" />
     <Compile Include="frontend\frmMain.cs">
       <SubType>Form</SubType>
