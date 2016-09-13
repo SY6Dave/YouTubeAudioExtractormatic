@@ -33,6 +33,47 @@ namespace YouTubeAudioExtractormatic
             if (!TestConnection()) throw new ArgumentException("api key invalid");
         }
 
+        public List<VideoData> GetVideosByPlaylist(string playlistID)
+        {
+            playlistID = ValidatePlaylistID(playlistID);
+
+            List<VideoData> videoDatas = new List<VideoData>();
+
+            var nextPageToken = "";
+            while (nextPageToken != null)
+            {
+                var request = youtubeService.PlaylistItems.List("snippet,contentDetails");
+                request.PlaylistId = playlistID;
+                request.MaxResults = 50;
+                request.PageToken = nextPageToken;
+
+                try
+                {
+                    var response = request.Execute();
+                    foreach(var video in response.Items)
+                    {
+                        VideoData currVideo = new VideoData(video.ContentDetails.VideoId, video.Snippet.Title);
+                        videoDatas.Add(currVideo);
+                    }
+
+                    nextPageToken = response.NextPageToken;
+                }
+                catch
+                {
+                    return null; //invalid playlist id
+                }
+            }
+
+            return videoDatas;
+        }
+
+        private string ValidatePlaylistID(string playlistID)
+        {
+            if (!playlistID.Contains("?list=")) return playlistID;
+
+            return playlistID.Remove(0, playlistID.IndexOf("?list=") + 6);
+        }
+
         private bool TestConnection()
         {
             var searchRequest = youtubeService.Search.List("snippet");

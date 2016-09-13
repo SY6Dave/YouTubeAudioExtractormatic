@@ -125,6 +125,17 @@ namespace YouTubeAudioExtractormatic
                 Directory.CreateDirectory(downloadsPath);
             }
 
+            /*temporary to test playlist downloading
+            YoutubeGrabber yg = new YoutubeGrabber();
+            foreach(VideoData video in yg.GetVideosByPlaylist(url))
+            {
+                object[] argsArray = { video.Url, bitrate };
+                Thread downloadThread = new Thread(BeginDownload);
+                threadHandler.AddActive(downloadThread);
+                downloadThread.Start(argsArray);
+            }
+            end temp section*/
+
             UrlParser urlParser = new UrlParser(url);
             url = urlParser.Url;
 
@@ -166,7 +177,20 @@ namespace YouTubeAudioExtractormatic
                     Thread.CurrentThread.Abort();
                 }
 
-                var highestQuality = downloadLinks.First(); //grab best quality link
+                YouTubeVideo highestQuality = null;
+
+                try
+                {
+                    highestQuality = downloadLinks.First(); //grab best quality link
+                }
+                catch
+                {
+                    if(guiForm != null)
+                    {
+                        guiForm.UpdateMsgLbl("Unable to download video");
+                    }
+                    return;
+                }
 
                 //setup http web request to get video bytes
                 var request = (HttpWebRequest)HttpWebRequest.Create(highestQuality.Uri);
