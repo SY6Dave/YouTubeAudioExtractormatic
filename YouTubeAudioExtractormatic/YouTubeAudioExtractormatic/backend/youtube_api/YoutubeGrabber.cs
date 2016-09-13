@@ -69,9 +69,15 @@ namespace YouTubeAudioExtractormatic
 
         private string ValidatePlaylistID(string playlistID)
         {
-            if (!playlistID.Contains("?list=")) return playlistID;
+            if (!playlistID.Contains("list=")) return playlistID;
 
-            return playlistID.Remove(0, playlistID.IndexOf("?list=") + 6);
+            string list = playlistID.Remove(0, playlistID.IndexOf("list=") + 5);
+            if(list.Contains("&"))
+            {
+                int index = list.IndexOf("&");
+                list = list.Remove(index, list.Length - index);
+            }
+            return list;
         }
 
         private bool TestConnection()
