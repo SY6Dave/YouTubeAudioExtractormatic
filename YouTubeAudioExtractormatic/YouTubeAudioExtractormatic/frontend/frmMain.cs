@@ -97,24 +97,6 @@ namespace YouTubeAudioExtractormatic
             selectedBitrate = 0;
         }
 
-        private void lblOpen_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if(!Directory.Exists(downloader.DownloadsPath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(downloader.DownloadsPath);
-                }
-                catch
-                {
-                    lblMsg.Text = "Unable to create downloads directory!";
-                    return;
-                }
-            }
-
-            System.Diagnostics.Process.Start(downloader.DownloadsPath);
-        }
-
         private void btnSearch_Click(object sender, EventArgs e)
         {
             Search();
@@ -169,6 +151,24 @@ namespace YouTubeAudioExtractormatic
             {
                 lstVideo.Items.Add(video);
             }
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(downloader.DownloadsPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(downloader.DownloadsPath);
+                }
+                catch
+                {
+                    lblMsg.Text = "Unable to create downloads directory!";
+                    return;
+                }
+            }
+
+            System.Diagnostics.Process.Start(downloader.DownloadsPath);
         }
     }
 }

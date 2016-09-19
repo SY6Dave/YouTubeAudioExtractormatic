@@ -27,11 +27,12 @@ namespace YouTubeAudioExtractormatic
             if (e.Index < 0 || Items.Count == 0) return;
 
             Graphics g = e.Graphics;
-            string text = Items[e.Index].ToString();
+            VideoData data = (VideoData)Items[e.Index];
+            string text = data.Title;
             Rectangle bounds = e.Bounds;
             bounds.Height -= 4;
             bounds.Y += 2;
-            Random rnd = new Random();
+            int progress = (int)data.DownloadProgress / 2 + (int)data.ConvertProgress / 2;
             bool selected = GetItemChecked(e.Index);
 
             g.FillRectangle(new SolidBrush(BackColor), e.Bounds);
@@ -39,7 +40,7 @@ namespace YouTubeAudioExtractormatic
             if (selected)
             {
                 g.FillRectangle(new SolidBrush(colSelected), bounds);
-                g.FillRectangle(new SolidBrush(colProgress), new Rectangle(bounds.X, bounds.Y, bounds.Width / 100 * rnd.Next(100), bounds.Height));
+                g.FillRectangle(new SolidBrush(colProgress), new Rectangle(bounds.X, bounds.Y, bounds.Width / 100 * progress, bounds.Height));
             }
             g.DrawString(text, e.Font, Brushes.White, bounds.Left + 20, bounds.Top + bounds.Height/4, StringFormat.GenericDefault);
         }

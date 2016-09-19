@@ -261,6 +261,7 @@
             this.btnOpen.TabIndex = 17;
             this.btnOpen.Text = "► 📁";
             this.btnOpen.UseVisualStyleBackColor = false;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
             // lstVideo
             // 
