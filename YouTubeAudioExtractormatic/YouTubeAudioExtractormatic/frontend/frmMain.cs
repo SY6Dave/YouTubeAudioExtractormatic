@@ -20,11 +20,6 @@ namespace YouTubeAudioExtractormatic
         uint selectedBitrate;
         bool selectAll = false;
 
-        public frmMain()
-        {
-            InitializeComponent();
-        }
-
         public frmMain(ThreadHandler threadHandler)
         {
             this.threadHandler = threadHandler;
@@ -32,6 +27,32 @@ namespace YouTubeAudioExtractormatic
             grabber = new YoutubeGrabber();
             selectedBitrate = 256;
             InitializeComponent();
+
+            BackColor = Color.FromArgb(66, 59, 76);
+            Color light = Color.FromArgb(96, 91, 104);
+            Color lighter = Color.FromArgb(144, 140, 150);
+            Color red = Color.FromArgb(193, 39, 45);
+            btnDownload.BackColor = red;
+            btnSearch.BackColor = red;
+
+            txtUrl.BackColor = light;
+            lstVideo.BackColor = light;
+            btnOpen.BackColor = light;
+
+            btnOpen.ForeColor = lighter;
+            lblUrl.ForeColor = lighter;
+            chkAll.ForeColor = lighter;
+            rb128.ForeColor = lighter;
+            rb192.ForeColor = lighter;
+            rb256.ForeColor = lighter;
+            rb320.ForeColor = lighter;
+            rb96.ForeColor = lighter;
+            rbVideo.ForeColor = lighter;
+            lblNote.ForeColor = lighter;
+            btnOpen.ForeColor = lighter;
+            lblMsg.ForeColor = lighter;
+            lblAuthor.ForeColor = lighter;
+            lblAuthor.LinkColor = lighter;
         }
 
         private void lblAuthor_Click(object sender, EventArgs e)
@@ -39,10 +60,6 @@ namespace YouTubeAudioExtractormatic
             ToolStripLabel lblAuthor = (ToolStripLabel)sender;
             System.Diagnostics.Process.Start(lblAuthor.Tag.ToString());
             lblAuthor.LinkVisited = true;
-        }
-
-        private void frmMain_Load(object sender, EventArgs e)
-        {
         }
 
         private void frmMain_Closing(object sender, FormClosingEventArgs e)

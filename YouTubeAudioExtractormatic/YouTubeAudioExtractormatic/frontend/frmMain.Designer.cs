@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.ssMain = new System.Windows.Forms.StatusStrip();
             this.lblAuthor = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblNote = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtUrl = new System.Windows.Forms.TextBox();
             this.btnDownload = new System.Windows.Forms.Button();
             this.rb96 = new System.Windows.Forms.RadioButton();
@@ -38,72 +39,88 @@
             this.rb192 = new System.Windows.Forms.RadioButton();
             this.rb256 = new System.Windows.Forms.RadioButton();
             this.rb320 = new System.Windows.Forms.RadioButton();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lblOpen = new System.Windows.Forms.LinkLabel();
+            this.lblUrl = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
-            this.lblMsg = new System.Windows.Forms.Label();
             this.rbVideo = new System.Windows.Forms.RadioButton();
-            this.lstVideo = new System.Windows.Forms.CheckedListBox();
             this.chkAll = new System.Windows.Forms.CheckBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblMsg = new System.Windows.Forms.Label();
+            this.btnOpen = new System.Windows.Forms.Button();
+            this.lstVideo = new YouTubeAudioExtractormatic.ProgressListBox();
             this.ssMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // ssMain
             // 
+            this.ssMain.BackColor = System.Drawing.Color.Transparent;
             this.ssMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblAuthor,
-            this.toolStripStatusLabel1});
-            this.ssMain.Location = new System.Drawing.Point(0, 424);
+            this.lblNote});
+            this.ssMain.Location = new System.Drawing.Point(0, 466);
             this.ssMain.Name = "ssMain";
             this.ssMain.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ssMain.Size = new System.Drawing.Size(608, 22);
+            this.ssMain.Size = new System.Drawing.Size(689, 22);
+            this.ssMain.SizingGrip = false;
             this.ssMain.TabIndex = 0;
             this.ssMain.Text = "statusStrip1";
             // 
             // lblAuthor
             // 
             this.lblAuthor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.lblAuthor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblAuthor.IsLink = true;
             this.lblAuthor.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lblAuthor.LinkColor = System.Drawing.Color.White;
             this.lblAuthor.Name = "lblAuthor";
             this.lblAuthor.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lblAuthor.Size = new System.Drawing.Size(130, 17);
+            this.lblAuthor.Size = new System.Drawing.Size(137, 17);
             this.lblAuthor.Tag = "http://www.davidmortiboy.com";
             this.lblAuthor.Text = "© David Mortiboy 2016";
+            this.lblAuthor.VisitedLinkColor = System.Drawing.Color.Red;
             this.lblAuthor.Click += new System.EventHandler(this.lblAuthor_Click);
             // 
-            // toolStripStatusLabel1
+            // lblNote
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(441, 17);
-            this.toolStripStatusLabel1.Text = "Note: This GUI is in pre-pre-pre-alpha state and doesn\'t represent the final prod" +
+            this.lblNote.ForeColor = System.Drawing.Color.LightGray;
+            this.lblNote.Name = "lblNote";
+            this.lblNote.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblNote.Size = new System.Drawing.Size(441, 17);
+            this.lblNote.Text = "Note: This GUI is in pre-pre-pre-alpha state and doesn\'t represent the final prod" +
     "uct";
             // 
             // txtUrl
             // 
-            this.txtUrl.Location = new System.Drawing.Point(175, 45);
+            this.txtUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtUrl.ForeColor = System.Drawing.Color.White;
+            this.txtUrl.Location = new System.Drawing.Point(127, 96);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(279, 20);
+            this.txtUrl.Size = new System.Drawing.Size(424, 20);
             this.txtUrl.TabIndex = 1;
             this.txtUrl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtUrl_KeyPress);
             // 
             // btnDownload
             // 
-            this.btnDownload.Location = new System.Drawing.Point(34, 360);
+            this.btnDownload.BackColor = System.Drawing.Color.Red;
+            this.btnDownload.FlatAppearance.BorderSize = 0;
+            this.btnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDownload.ForeColor = System.Drawing.Color.White;
+            this.btnDownload.Location = new System.Drawing.Point(38, 409);
             this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(118, 23);
+            this.btnDownload.Size = new System.Drawing.Size(23, 23);
             this.btnDownload.TabIndex = 2;
-            this.btnDownload.Text = "Begin Download";
-            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Text = "▼";
+            this.btnDownload.UseVisualStyleBackColor = false;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
             // rb96
             // 
             this.rb96.AutoSize = true;
-            this.rb96.Location = new System.Drawing.Point(34, 337);
+            this.rb96.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rb96.ForeColor = System.Drawing.Color.LightGray;
+            this.rb96.Location = new System.Drawing.Point(38, 375);
             this.rb96.Name = "rb96";
-            this.rb96.Size = new System.Drawing.Size(110, 17);
+            this.rb96.Size = new System.Drawing.Size(109, 17);
             this.rb96.TabIndex = 3;
             this.rb96.Text = "96 kbit/s - Lowest";
             this.rb96.UseVisualStyleBackColor = true;
@@ -112,9 +129,11 @@
             // rb128
             // 
             this.rb128.AutoSize = true;
-            this.rb128.Location = new System.Drawing.Point(156, 319);
+            this.rb128.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rb128.ForeColor = System.Drawing.Color.LightGray;
+            this.rb128.Location = new System.Drawing.Point(160, 357);
             this.rb128.Name = "rb128";
-            this.rb128.Size = new System.Drawing.Size(102, 17);
+            this.rb128.Size = new System.Drawing.Size(101, 17);
             this.rb128.TabIndex = 4;
             this.rb128.Text = "128 kbit/s - Low";
             this.rb128.UseVisualStyleBackColor = true;
@@ -123,9 +142,11 @@
             // rb192
             // 
             this.rb192.AutoSize = true;
-            this.rb192.Location = new System.Drawing.Point(156, 337);
+            this.rb192.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rb192.ForeColor = System.Drawing.Color.LightGray;
+            this.rb192.Location = new System.Drawing.Point(160, 375);
             this.rb192.Name = "rb192";
-            this.rb192.Size = new System.Drawing.Size(119, 17);
+            this.rb192.Size = new System.Drawing.Size(118, 17);
             this.rb192.TabIndex = 5;
             this.rb192.Text = "192 kbit/s - Medium";
             this.rb192.UseVisualStyleBackColor = true;
@@ -135,9 +156,11 @@
             // 
             this.rb256.AutoSize = true;
             this.rb256.Checked = true;
-            this.rb256.Location = new System.Drawing.Point(281, 319);
+            this.rb256.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rb256.ForeColor = System.Drawing.Color.LightGray;
+            this.rb256.Location = new System.Drawing.Point(285, 357);
             this.rb256.Name = "rb256";
-            this.rb256.Size = new System.Drawing.Size(104, 17);
+            this.rb256.Size = new System.Drawing.Size(103, 17);
             this.rb256.TabIndex = 6;
             this.rb256.TabStop = true;
             this.rb256.Text = "256 kbit/s - High";
@@ -147,96 +170,123 @@
             // rb320
             // 
             this.rb320.AutoSize = true;
-            this.rb320.Location = new System.Drawing.Point(281, 337);
+            this.rb320.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rb320.ForeColor = System.Drawing.Color.LightGray;
+            this.rb320.Location = new System.Drawing.Point(285, 375);
             this.rb320.Name = "rb320";
-            this.rb320.Size = new System.Drawing.Size(118, 17);
+            this.rb320.Size = new System.Drawing.Size(117, 17);
             this.rb320.TabIndex = 7;
             this.rb320.Text = "320 kbit/s - Highest";
             this.rb320.UseVisualStyleBackColor = true;
             this.rb320.CheckedChanged += new System.EventHandler(this.rb320_CheckedChanged);
             // 
-            // label1
+            // lblUrl
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(32, 48);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(137, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Enter YouTube Video URL:";
-            // 
-            // lblOpen
-            // 
-            this.lblOpen.AutoSize = true;
-            this.lblOpen.Location = new System.Drawing.Point(31, 399);
-            this.lblOpen.Name = "lblOpen";
-            this.lblOpen.Size = new System.Drawing.Size(121, 13);
-            this.lblOpen.TabIndex = 9;
-            this.lblOpen.TabStop = true;
-            this.lblOpen.Text = "Open Downloads Folder";
-            this.lblOpen.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblOpen_LinkClicked);
+            this.lblUrl.AutoSize = true;
+            this.lblUrl.ForeColor = System.Drawing.Color.LightGray;
+            this.lblUrl.Location = new System.Drawing.Point(93, 98);
+            this.lblUrl.Name = "lblUrl";
+            this.lblUrl.Size = new System.Drawing.Size(32, 13);
+            this.lblUrl.TabIndex = 8;
+            this.lblUrl.Text = "URL:";
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(470, 43);
+            this.btnSearch.BackColor = System.Drawing.Color.Red;
+            this.btnSearch.FlatAppearance.BorderSize = 0;
+            this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSearch.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSearch.ForeColor = System.Drawing.Color.White;
+            this.btnSearch.Location = new System.Drawing.Point(557, 94);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.Size = new System.Drawing.Size(23, 23);
             this.btnSearch.TabIndex = 10;
-            this.btnSearch.Text = "Search";
-            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Text = "►";
+            this.btnSearch.UseVisualStyleBackColor = false;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
-            // lblMsg
-            // 
-            this.lblMsg.AutoSize = true;
-            this.lblMsg.Location = new System.Drawing.Point(35, 386);
-            this.lblMsg.Name = "lblMsg";
-            this.lblMsg.Size = new System.Drawing.Size(0, 13);
-            this.lblMsg.TabIndex = 11;
             // 
             // rbVideo
             // 
             this.rbVideo.AutoSize = true;
-            this.rbVideo.Location = new System.Drawing.Point(34, 319);
+            this.rbVideo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.rbVideo.ForeColor = System.Drawing.Color.LightGray;
+            this.rbVideo.Location = new System.Drawing.Point(38, 357);
             this.rbVideo.Name = "rbVideo";
-            this.rbVideo.Size = new System.Drawing.Size(93, 17);
+            this.rbVideo.Size = new System.Drawing.Size(92, 17);
             this.rbVideo.TabIndex = 12;
             this.rbVideo.Text = "Save as video";
             this.rbVideo.UseVisualStyleBackColor = true;
             this.rbVideo.CheckedChanged += new System.EventHandler(this.rbVideo_CheckedChanged);
             // 
-            // lstVideo
-            // 
-            this.lstVideo.CheckOnClick = true;
-            this.lstVideo.FormattingEnabled = true;
-            this.lstVideo.Location = new System.Drawing.Point(35, 76);
-            this.lstVideo.Name = "lstVideo";
-            this.lstVideo.Size = new System.Drawing.Size(510, 214);
-            this.lstVideo.TabIndex = 13;
-            // 
             // chkAll
             // 
             this.chkAll.AutoSize = true;
-            this.chkAll.Location = new System.Drawing.Point(38, 296);
+            this.chkAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkAll.ForeColor = System.Drawing.Color.LightGray;
+            this.chkAll.Location = new System.Drawing.Point(38, 134);
             this.chkAll.Name = "chkAll";
-            this.chkAll.Size = new System.Drawing.Size(69, 17);
+            this.chkAll.Size = new System.Drawing.Size(66, 17);
             this.chkAll.TabIndex = 14;
             this.chkAll.Text = "Select all";
             this.chkAll.UseVisualStyleBackColor = true;
             this.chkAll.CheckedChanged += new System.EventHandler(this.chkAll_CheckedChanged);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(96, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(485, 72);
+            this.pictureBox1.TabIndex = 16;
+            this.pictureBox1.TabStop = false;
+            // 
+            // lblMsg
+            // 
+            this.lblMsg.AutoSize = true;
+            this.lblMsg.Location = new System.Drawing.Point(43, 442);
+            this.lblMsg.Name = "lblMsg";
+            this.lblMsg.Size = new System.Drawing.Size(0, 13);
+            this.lblMsg.TabIndex = 11;
+            // 
+            // btnOpen
+            // 
+            this.btnOpen.BackColor = System.Drawing.Color.Red;
+            this.btnOpen.FlatAppearance.BorderSize = 0;
+            this.btnOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOpen.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpen.ForeColor = System.Drawing.Color.White;
+            this.btnOpen.Location = new System.Drawing.Point(67, 409);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(49, 23);
+            this.btnOpen.TabIndex = 17;
+            this.btnOpen.Text = "► 📁";
+            this.btnOpen.UseVisualStyleBackColor = false;
+            // 
+            // lstVideo
+            // 
+            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstVideo.CheckOnClick = true;
+            this.lstVideo.FormattingEnabled = true;
+            this.lstVideo.Location = new System.Drawing.Point(38, 157);
+            this.lstVideo.Name = "lstVideo";
+            this.lstVideo.Size = new System.Drawing.Size(604, 192);
+            this.lstVideo.TabIndex = 15;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-            this.ClientSize = new System.Drawing.Size(608, 446);
-            this.Controls.Add(this.chkAll);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(689, 488);
+            this.Controls.Add(this.btnOpen);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lstVideo);
+            this.Controls.Add(this.chkAll);
             this.Controls.Add(this.rbVideo);
             this.Controls.Add(this.lblMsg);
             this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.lblOpen);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblUrl);
             this.Controls.Add(this.rb320);
             this.Controls.Add(this.rb256);
             this.Controls.Add(this.rb192);
@@ -250,9 +300,9 @@
             this.Text = "YouTube Audio Extractormatic";
             this.Activated += new System.EventHandler(this.frmMain_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_Closing);
-            this.Load += new System.EventHandler(this.frmMain_Load);
             this.ssMain.ResumeLayout(false);
             this.ssMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -262,7 +312,7 @@
 
         private System.Windows.Forms.StatusStrip ssMain;
         private System.Windows.Forms.ToolStripStatusLabel lblAuthor;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel lblNote;
         private System.Windows.Forms.TextBox txtUrl;
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.RadioButton rb96;
@@ -270,13 +320,14 @@
         private System.Windows.Forms.RadioButton rb192;
         private System.Windows.Forms.RadioButton rb256;
         private System.Windows.Forms.RadioButton rb320;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.LinkLabel lblOpen;
+        private System.Windows.Forms.Label lblUrl;
         private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.Label lblMsg;
         private System.Windows.Forms.RadioButton rbVideo;
-        private System.Windows.Forms.CheckedListBox lstVideo;
         private System.Windows.Forms.CheckBox chkAll;
+        private ProgressListBox lstVideo;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label lblMsg;
+        private System.Windows.Forms.Button btnOpen;
     }
 }
 
