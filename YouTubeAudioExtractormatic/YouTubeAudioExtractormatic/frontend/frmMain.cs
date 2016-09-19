@@ -119,6 +119,18 @@ namespace YouTubeAudioExtractormatic
             }
         }
 
+        public void InvalidateList()
+        {
+            if (lstVideo.InvokeRequired)
+            {
+                lstVideo.BeginInvoke((MethodInvoker)delegate() { lstVideo.Invalidate(); ;});
+            }
+            else
+            {
+                lstVideo.Invalidate();
+            }
+        }
+
         private void frmMain_Activated(object sender, EventArgs e)
         {
             txtUrl.Text = Clipboard.GetText();
