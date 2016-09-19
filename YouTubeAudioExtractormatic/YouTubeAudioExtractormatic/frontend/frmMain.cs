@@ -19,6 +19,9 @@ namespace YouTubeAudioExtractormatic
         YoutubeGrabber grabber;
         uint selectedBitrate;
         bool selectAll = false;
+        Color light = Color.FromArgb(96, 91, 104);
+        Color lighter = Color.FromArgb(144, 140, 150);
+        Color red = Color.FromArgb(193, 39, 45);
 
         public frmMain(ThreadHandler threadHandler)
         {
@@ -29,30 +32,37 @@ namespace YouTubeAudioExtractormatic
             InitializeComponent();
 
             BackColor = Color.FromArgb(66, 59, 76);
-            Color light = Color.FromArgb(96, 91, 104);
-            Color lighter = Color.FromArgb(144, 140, 150);
-            Color red = Color.FromArgb(193, 39, 45);
+            lstVideo.BackColor = Color.FromArgb(56, 49, 66);
+
             btnDownload.BackColor = red;
             btnSearch.BackColor = red;
 
             txtUrl.BackColor = light;
-            lstVideo.BackColor = light;
             btnOpen.BackColor = light;
 
             btnOpen.ForeColor = lighter;
             lblUrl.ForeColor = lighter;
             chkAll.ForeColor = lighter;
+            rb96.ForeColor = lighter;
             rb128.ForeColor = lighter;
             rb192.ForeColor = lighter;
             rb256.ForeColor = lighter;
             rb320.ForeColor = lighter;
-            rb96.ForeColor = lighter;
             rbVideo.ForeColor = lighter;
             lblNote.ForeColor = lighter;
             btnOpen.ForeColor = lighter;
             lblMsg.ForeColor = lighter;
             lblAuthor.ForeColor = lighter;
             lblAuthor.LinkColor = lighter;
+
+            rb96.Paint += RadioButtonPaint;
+            rb128.Paint += RadioButtonPaint;
+            rb192.Paint += RadioButtonPaint;
+            rb256.Paint += RadioButtonPaint;
+            rb320.Paint += RadioButtonPaint;
+            rbVideo.Paint += RadioButtonPaint;
+
+            chkAll.Paint += CheckBoxPaint;
         }
 
         private void lblAuthor_Click(object sender, EventArgs e)
@@ -181,6 +191,28 @@ namespace YouTubeAudioExtractormatic
             }
 
             System.Diagnostics.Process.Start(downloader.DownloadsPath);
+        }
+
+        private void RadioButtonPaint(object sender, PaintEventArgs e)
+        {
+            var radioButton = (RadioButton)sender;
+
+            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 0, 12, 16));
+            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 3, 11, 11));
+
+            if (radioButton.Checked)
+                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 5, 7, 7));
+        }
+
+        private void CheckBoxPaint(object sender, PaintEventArgs e)
+        {
+            var checkbox = (CheckBox)sender;
+
+            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 0, 12, 16));
+            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 3, 11, 11));
+
+            if (checkbox.Checked)
+                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 5, 7, 7));
         }
     }
 }

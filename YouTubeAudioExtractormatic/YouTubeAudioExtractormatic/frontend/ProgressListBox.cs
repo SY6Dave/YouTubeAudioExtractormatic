@@ -11,8 +11,8 @@ namespace YouTubeAudioExtractormatic
     public class ProgressListBox : CheckedListBox
     {
         Color colProgress = Color.FromArgb(74, 115, 93);
-        Color colProgress2 = Color.FromArgb(64, 105, 83);
-        Color colSelected = Color.FromArgb(144, 140, 150);//Color.FromArgb(147, 95, 83);
+        Color colProgress2 = Color.FromArgb(54, 95, 73);
+        Color colSelected = Color.FromArgb(96, 91, 104);
 
         public ProgressListBox()
         {
@@ -31,26 +31,32 @@ namespace YouTubeAudioExtractormatic
 
             if (e.Index < 0 || Items.Count == 0) return;
 
-            Graphics g = e.Graphics;
             VideoData data = (VideoData)Items[e.Index];
-            string text = data.Title;
             Rectangle bounds = e.Bounds;
+            Graphics g = e.Graphics;
+            string text = data.Title;
+            bool selected = GetItemChecked(e.Index);
+            
             bounds.Height -= 4;
             bounds.Y += 2;
-            bool selected = GetItemChecked(e.Index);
+
+            double dlProgressWidth = bounds.Width / 100.0 * 85.0;
+            double convProgressWidth = bounds.Width / 100.0 * 15.0;
 
             g.FillRectangle(new SolidBrush(BackColor), e.Bounds);
             
-            if (selected)
-            {
-                g.FillRectangle(new SolidBrush(colSelected), bounds);
-                g.FillRectangle(new SolidBrush(colProgress), new Rectangle(bounds.X, bounds.Y, (int)Math.Ceiling((bounds.Width / 2) / 100.0 * data.DownloadProgress), bounds.Height));
-                g.FillRectangle(new SolidBrush(colProgress2), new Rectangle(bounds.X + bounds.Width / 2, bounds.Y, (int)Math.Ceiling((bounds.Width / 2) / 100.0 * data.ConvertProgress), bounds.Height));
-            }
+            if (selected) g.FillRectangle(new SolidBrush(colSelected), bounds);
+
+            g.FillRectangle(new SolidBrush(colProgress), new Rectangle(bounds.X, bounds.Y, (int)Math.Ceiling(dlProgressWidth / 100.0 * data.DownloadProgress), bounds.Height));
+            g.FillRectangle(new SolidBrush(colProgress2), new Rectangle(bounds.X + (int)dlProgressWidth, bounds.Y, (int)Math.Ceiling(convProgressWidth / 100.0 * data.ConvertProgress), bounds.Height));
+
             g.DrawString(text, e.Font, Brushes.White, bounds.Left + 20, bounds.Top + bounds.Height/4, StringFormat.GenericDefault);
         }
 
-        // Code from http://yacsharpblog.blogspot.co.uk/2008/07/listbox-flicker.html
+        /// <summary>
+        /// Code from http://yacsharpblog.blogspot.co.uk/2008/07/listbox-flicker.html
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)  
         {  
             Region iRegion = new Region(e.ClipRectangle);  
