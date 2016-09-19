@@ -57,7 +57,7 @@
             this.ssMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblAuthor,
             this.lblNote});
-            this.ssMain.Location = new System.Drawing.Point(0, 466);
+            this.ssMain.Location = new System.Drawing.Point(0, 487);
             this.ssMain.Name = "ssMain";
             this.ssMain.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.ssMain.Size = new System.Drawing.Size(689, 22);
@@ -105,7 +105,7 @@
             this.btnDownload.FlatAppearance.BorderSize = 0;
             this.btnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDownload.ForeColor = System.Drawing.Color.White;
-            this.btnDownload.Location = new System.Drawing.Point(38, 409);
+            this.btnDownload.Location = new System.Drawing.Point(38, 438);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(23, 23);
             this.btnDownload.TabIndex = 2;
@@ -118,7 +118,7 @@
             this.rb96.AutoSize = true;
             this.rb96.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rb96.ForeColor = System.Drawing.Color.LightGray;
-            this.rb96.Location = new System.Drawing.Point(38, 375);
+            this.rb96.Location = new System.Drawing.Point(38, 413);
             this.rb96.Name = "rb96";
             this.rb96.Size = new System.Drawing.Size(109, 17);
             this.rb96.TabIndex = 3;
@@ -131,7 +131,7 @@
             this.rb128.AutoSize = true;
             this.rb128.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rb128.ForeColor = System.Drawing.Color.LightGray;
-            this.rb128.Location = new System.Drawing.Point(160, 357);
+            this.rb128.Location = new System.Drawing.Point(160, 395);
             this.rb128.Name = "rb128";
             this.rb128.Size = new System.Drawing.Size(101, 17);
             this.rb128.TabIndex = 4;
@@ -144,7 +144,7 @@
             this.rb192.AutoSize = true;
             this.rb192.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rb192.ForeColor = System.Drawing.Color.LightGray;
-            this.rb192.Location = new System.Drawing.Point(160, 375);
+            this.rb192.Location = new System.Drawing.Point(160, 413);
             this.rb192.Name = "rb192";
             this.rb192.Size = new System.Drawing.Size(118, 17);
             this.rb192.TabIndex = 5;
@@ -158,7 +158,7 @@
             this.rb256.Checked = true;
             this.rb256.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rb256.ForeColor = System.Drawing.Color.LightGray;
-            this.rb256.Location = new System.Drawing.Point(285, 357);
+            this.rb256.Location = new System.Drawing.Point(285, 395);
             this.rb256.Name = "rb256";
             this.rb256.Size = new System.Drawing.Size(103, 17);
             this.rb256.TabIndex = 6;
@@ -172,7 +172,7 @@
             this.rb320.AutoSize = true;
             this.rb320.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rb320.ForeColor = System.Drawing.Color.LightGray;
-            this.rb320.Location = new System.Drawing.Point(285, 375);
+            this.rb320.Location = new System.Drawing.Point(285, 413);
             this.rb320.Name = "rb320";
             this.rb320.Size = new System.Drawing.Size(117, 17);
             this.rb320.TabIndex = 7;
@@ -210,7 +210,7 @@
             this.rbVideo.AutoSize = true;
             this.rbVideo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rbVideo.ForeColor = System.Drawing.Color.LightGray;
-            this.rbVideo.Location = new System.Drawing.Point(38, 357);
+            this.rbVideo.Location = new System.Drawing.Point(38, 395);
             this.rbVideo.Name = "rbVideo";
             this.rbVideo.Size = new System.Drawing.Size(92, 17);
             this.rbVideo.TabIndex = 12;
@@ -243,7 +243,7 @@
             // lblMsg
             // 
             this.lblMsg.AutoSize = true;
-            this.lblMsg.Location = new System.Drawing.Point(43, 442);
+            this.lblMsg.Location = new System.Drawing.Point(43, 471);
             this.lblMsg.Name = "lblMsg";
             this.lblMsg.Size = new System.Drawing.Size(0, 13);
             this.lblMsg.TabIndex = 11;
@@ -255,7 +255,7 @@
             this.btnOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpen.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpen.ForeColor = System.Drawing.Color.White;
-            this.btnOpen.Location = new System.Drawing.Point(67, 409);
+            this.btnOpen.Location = new System.Drawing.Point(67, 438);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(49, 23);
             this.btnOpen.TabIndex = 17;
@@ -270,7 +270,7 @@
             this.lstVideo.FormattingEnabled = true;
             this.lstVideo.Location = new System.Drawing.Point(38, 157);
             this.lstVideo.Name = "lstVideo";
-            this.lstVideo.Size = new System.Drawing.Size(604, 192);
+            this.lstVideo.Size = new System.Drawing.Size(604, 216);
             this.lstVideo.TabIndex = 15;
             // 
             // frmMain
@@ -278,8 +278,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(689, 488);
+            this.BackColor = System.Drawing.Color.MidnightBlue;
+            this.ClientSize = new System.Drawing.Size(689, 509);
             this.Controls.Add(this.btnOpen);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lstVideo);
