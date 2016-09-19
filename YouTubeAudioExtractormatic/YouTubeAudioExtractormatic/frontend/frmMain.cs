@@ -122,7 +122,7 @@ namespace YouTubeAudioExtractormatic
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            downloader.BeginDownloadThread(txtUrl.Text, selectedBitrate);
+            downloader.BeginDownloadThread(lstVideo.CheckedItems, selectedBitrate);
         }
 
         public void UpdateMsgLbl(string text)
@@ -167,7 +167,7 @@ namespace YouTubeAudioExtractormatic
 
             foreach (var video in retrievedVideos)
             {
-                lstVideo.Items.Add(video.Title);
+                lstVideo.Items.Add(video);
             }
         }
     }
