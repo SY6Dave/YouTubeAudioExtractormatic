@@ -125,17 +125,6 @@ namespace YouTubeAudioExtractormatic
                 Directory.CreateDirectory(downloadsPath);
             }
 
-            /*temporary to test playlist downloading
-            YoutubeGrabber yg = new YoutubeGrabber();
-            foreach(VideoData video in yg.GetVideosByPlaylist(url))
-            {
-                object[] argsArray = { video.Url, bitrate };
-                Thread downloadThread = new Thread(BeginDownload);
-                threadHandler.AddActive(downloadThread);
-                downloadThread.Start(argsArray);
-            }
-            end temp section*/
-
             UrlParser urlParser = new UrlParser(url);
             url = urlParser.Url;
 

@@ -60,24 +60,57 @@ namespace YouTubeAudioExtractormatic
                 }
                 catch
                 {
-                    return null; //invalid playlist id
+                    VideoData video = GetVideo(playlistID);
+                    if (video == null) return null; //not a valid playlist or video
+
+                    return new List<VideoData>() { video };
                 }
             }
 
             return videoDatas;
         }
 
+        private VideoData GetVideo(string videoID)
+        {
+            videoID = ValidateVideoID(videoID);
+            var request = youtubeService.Videos.List("snippet,contentDetails");
+            request.Id = videoID;
+
+            try
+            {
+                var response = request.Execute();
+                return new VideoData(response.Items[0].Id, response.Items[0].Snippet.Title);
+            }
+            catch
+            {
+                return null; //invalid video id
+            }
+        }
+
+        private string ValidateVideoID(string videoID)
+        {
+            if (!videoID.Contains("watch?v=")) return videoID;
+
+            string id = videoID.Remove(0, videoID.IndexOf("watch?v=") + 8);
+            if (id.Contains("&"))
+            {
+                int index = id.IndexOf("&");
+                id = id.Remove(index, id.Length - index);
+            }
+            return id;
+        }
+
         private string ValidatePlaylistID(string playlistID)
         {
             if (!playlistID.Contains("list=")) return playlistID;
 
-            string list = playlistID.Remove(0, playlistID.IndexOf("list=") + 5);
-            if(list.Contains("&"))
+            string id = playlistID.Remove(0, playlistID.IndexOf("list=") + 5);
+            if(id.Contains("&"))
             {
-                int index = list.IndexOf("&");
-                list = list.Remove(index, list.Length - index);
+                int index = id.IndexOf("&");
+                id = id.Remove(index, id.Length - index);
             }
-            return list;
+            return id;
         }
 
         private bool TestConnection()

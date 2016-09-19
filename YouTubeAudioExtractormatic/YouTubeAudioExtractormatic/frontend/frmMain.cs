@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace YouTubeAudioExtractormatic
     {
         ThreadHandler threadHandler;
         Downloader downloader;
+        YoutubeGrabber grabber;
         uint selectedBitrate;
+        bool selectAll = false;
 
         public frmMain()
         {
@@ -26,6 +29,7 @@ namespace YouTubeAudioExtractormatic
         {
             this.threadHandler = threadHandler;
             downloader = new Downloader(threadHandler, this);
+            grabber = new YoutubeGrabber();
             selectedBitrate = 256;
             InitializeComponent();
         }
@@ -94,9 +98,9 @@ namespace YouTubeAudioExtractormatic
             System.Diagnostics.Process.Start(downloader.DownloadsPath);
         }
 
-        private void btnPaste_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
-            txtUrl.Text = Clipboard.GetText();
+            Search();
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
@@ -119,6 +123,35 @@ namespace YouTubeAudioExtractormatic
         private void frmMain_Activated(object sender, EventArgs e)
         {
             txtUrl.Text = Clipboard.GetText();
+        }
+
+        private void chkAll_CheckedChanged(object sender, EventArgs e)
+        {
+            selectAll = chkAll.Checked;
+
+            for (int i = 0; i < lstVideo.Items.Count; i++) lstVideo.SetItemChecked(i, selectAll);
+        }
+
+        private void txtUrl_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)13)
+            {
+                Search();
+            }
+        }
+
+        private void Search()
+        {
+            chkAll.Checked = false;
+            lstVideo.Items.Clear();
+
+            List<VideoData> retrievedVideos = grabber.GetVideosByPlaylist(txtUrl.Text);
+            if (retrievedVideos == null) return;
+
+            foreach (var video in retrievedVideos)
+            {
+                lstVideo.Items.Add(video.Title);
+            }
         }
     }
 }

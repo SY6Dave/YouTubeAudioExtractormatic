@@ -40,9 +40,11 @@
             this.rb320 = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.lblOpen = new System.Windows.Forms.LinkLabel();
-            this.btnPaste = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.lblMsg = new System.Windows.Forms.Label();
             this.rbVideo = new System.Windows.Forms.RadioButton();
+            this.lstVideo = new System.Windows.Forms.CheckedListBox();
+            this.chkAll = new System.Windows.Forms.CheckBox();
             this.ssMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -84,21 +86,22 @@
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.Size = new System.Drawing.Size(279, 20);
             this.txtUrl.TabIndex = 1;
+            this.txtUrl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtUrl_KeyPress);
             // 
             // btnDownload
             // 
-            this.btnDownload.Location = new System.Drawing.Point(35, 286);
+            this.btnDownload.Location = new System.Drawing.Point(34, 360);
             this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(75, 23);
+            this.btnDownload.Size = new System.Drawing.Size(118, 23);
             this.btnDownload.TabIndex = 2;
-            this.btnDownload.Text = "Download";
+            this.btnDownload.Text = "Begin Download";
             this.btnDownload.UseVisualStyleBackColor = true;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
             // rb96
             // 
             this.rb96.AutoSize = true;
-            this.rb96.Location = new System.Drawing.Point(34, 122);
+            this.rb96.Location = new System.Drawing.Point(34, 337);
             this.rb96.Name = "rb96";
             this.rb96.Size = new System.Drawing.Size(110, 17);
             this.rb96.TabIndex = 3;
@@ -109,7 +112,7 @@
             // rb128
             // 
             this.rb128.AutoSize = true;
-            this.rb128.Location = new System.Drawing.Point(34, 156);
+            this.rb128.Location = new System.Drawing.Point(156, 319);
             this.rb128.Name = "rb128";
             this.rb128.Size = new System.Drawing.Size(102, 17);
             this.rb128.TabIndex = 4;
@@ -120,7 +123,7 @@
             // rb192
             // 
             this.rb192.AutoSize = true;
-            this.rb192.Location = new System.Drawing.Point(34, 189);
+            this.rb192.Location = new System.Drawing.Point(156, 337);
             this.rb192.Name = "rb192";
             this.rb192.Size = new System.Drawing.Size(119, 17);
             this.rb192.TabIndex = 5;
@@ -132,7 +135,7 @@
             // 
             this.rb256.AutoSize = true;
             this.rb256.Checked = true;
-            this.rb256.Location = new System.Drawing.Point(34, 222);
+            this.rb256.Location = new System.Drawing.Point(281, 319);
             this.rb256.Name = "rb256";
             this.rb256.Size = new System.Drawing.Size(104, 17);
             this.rb256.TabIndex = 6;
@@ -144,7 +147,7 @@
             // rb320
             // 
             this.rb320.AutoSize = true;
-            this.rb320.Location = new System.Drawing.Point(35, 254);
+            this.rb320.Location = new System.Drawing.Point(281, 337);
             this.rb320.Name = "rb320";
             this.rb320.Size = new System.Drawing.Size(118, 17);
             this.rb320.TabIndex = 7;
@@ -164,7 +167,7 @@
             // lblOpen
             // 
             this.lblOpen.AutoSize = true;
-            this.lblOpen.Location = new System.Drawing.Point(31, 321);
+            this.lblOpen.Location = new System.Drawing.Point(31, 399);
             this.lblOpen.Name = "lblOpen";
             this.lblOpen.Size = new System.Drawing.Size(121, 13);
             this.lblOpen.TabIndex = 9;
@@ -172,15 +175,15 @@
             this.lblOpen.Text = "Open Downloads Folder";
             this.lblOpen.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblOpen_LinkClicked);
             // 
-            // btnPaste
+            // btnSearch
             // 
-            this.btnPaste.Location = new System.Drawing.Point(470, 43);
-            this.btnPaste.Name = "btnPaste";
-            this.btnPaste.Size = new System.Drawing.Size(75, 23);
-            this.btnPaste.TabIndex = 10;
-            this.btnPaste.Text = "Paste";
-            this.btnPaste.UseVisualStyleBackColor = true;
-            this.btnPaste.Click += new System.EventHandler(this.btnPaste_Click);
+            this.btnSearch.Location = new System.Drawing.Point(470, 43);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.TabIndex = 10;
+            this.btnSearch.Text = "Search";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // lblMsg
             // 
@@ -193,7 +196,7 @@
             // rbVideo
             // 
             this.rbVideo.AutoSize = true;
-            this.rbVideo.Location = new System.Drawing.Point(35, 90);
+            this.rbVideo.Location = new System.Drawing.Point(34, 319);
             this.rbVideo.Name = "rbVideo";
             this.rbVideo.Size = new System.Drawing.Size(93, 17);
             this.rbVideo.TabIndex = 12;
@@ -201,15 +204,37 @@
             this.rbVideo.UseVisualStyleBackColor = true;
             this.rbVideo.CheckedChanged += new System.EventHandler(this.rbVideo_CheckedChanged);
             // 
+            // lstVideo
+            // 
+            this.lstVideo.CheckOnClick = true;
+            this.lstVideo.FormattingEnabled = true;
+            this.lstVideo.Location = new System.Drawing.Point(35, 76);
+            this.lstVideo.Name = "lstVideo";
+            this.lstVideo.Size = new System.Drawing.Size(510, 214);
+            this.lstVideo.TabIndex = 13;
+            // 
+            // chkAll
+            // 
+            this.chkAll.AutoSize = true;
+            this.chkAll.Location = new System.Drawing.Point(38, 296);
+            this.chkAll.Name = "chkAll";
+            this.chkAll.Size = new System.Drawing.Size(69, 17);
+            this.chkAll.TabIndex = 14;
+            this.chkAll.Text = "Select all";
+            this.chkAll.UseVisualStyleBackColor = true;
+            this.chkAll.CheckedChanged += new System.EventHandler(this.chkAll_CheckedChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.ClientSize = new System.Drawing.Size(608, 446);
+            this.Controls.Add(this.chkAll);
+            this.Controls.Add(this.lstVideo);
             this.Controls.Add(this.rbVideo);
             this.Controls.Add(this.lblMsg);
-            this.Controls.Add(this.btnPaste);
+            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.lblOpen);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.rb320);
@@ -247,9 +272,11 @@
         private System.Windows.Forms.RadioButton rb320;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel lblOpen;
-        private System.Windows.Forms.Button btnPaste;
+        private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Label lblMsg;
         private System.Windows.Forms.RadioButton rbVideo;
+        private System.Windows.Forms.CheckedListBox lstVideo;
+        private System.Windows.Forms.CheckBox chkAll;
     }
 }
 
