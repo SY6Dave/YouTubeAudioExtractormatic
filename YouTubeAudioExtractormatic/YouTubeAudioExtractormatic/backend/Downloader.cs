@@ -134,6 +134,26 @@ namespace YouTubeAudioExtractormatic
             downloadThread.Start(argsArray);
         }
 
+        public void BeginDownloadThread(System.Windows.Forms.CheckedListBox.CheckedItemCollection selectedVideos, uint bitrate = 0)
+        {
+            if (!Directory.Exists(downloadsPath))
+            {
+                Directory.CreateDirectory(downloadsPath);
+            }
+
+            foreach(var item in selectedVideos)
+            {
+                VideoData video = (VideoData)item;
+                UrlParser urlParser = new UrlParser(video.Url);
+                video.Url = urlParser.Url;
+
+                object[] argsArray = { video, bitrate };
+                Thread downloadThread = new Thread(BeginDownload);
+                threadHandler.AddActive(downloadThread);
+                downloadThread.Start(argsArray);
+            }
+        }
+
         /// <summary>
         /// Download a YouTube video based on the given url and bitrate in the object array
         /// </summary>
@@ -141,9 +161,9 @@ namespace YouTubeAudioExtractormatic
         private void BeginDownload(object threadArgs)
         {
             object[] argsArray = (object[])threadArgs;
-            string url;
+            VideoData video;
             uint bitrate;
-            url = (string)argsArray[0];
+            video = (VideoData)argsArray[0];
             bitrate = (uint)argsArray[1];
 
             using(var cli = Client.For(new YouTube())) //use a libvideo client to get video metadata
@@ -152,7 +172,7 @@ namespace YouTubeAudioExtractormatic
 
                 try
                 {
-                    downloadLinks = cli.GetAllVideos(url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
+                    downloadLinks = cli.GetAllVideos(video.Url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
                 }
                 catch(ArgumentException)
                 {
@@ -206,7 +226,7 @@ namespace YouTubeAudioExtractormatic
                                     if (read > 0)
                                     {
                                         bytes.Write(buffer, 0, read);
-                                        DownloadProgress = (int)(bytes.Length * 100 / len);
+                                        video.SetDownloadProgress((bytes.Length * 100 / len));
                                     }
                                     else
                                     {
@@ -259,7 +279,7 @@ namespace YouTubeAudioExtractormatic
                                             guiForm.UpdateMsgLbl("Converting to mp3... Do not close this window!");
                                         }
 
-                                        ToMp3(tempVideo.Path, audioPath, duration, bitrate); //convert to mp3
+                                        ToMp3(tempVideo.Path, audioPath, duration, video, bitrate); //convert to mp3
 
                                         if (guiForm != null)
                                         {
@@ -282,7 +302,7 @@ namespace YouTubeAudioExtractormatic
         /// /// <param name="duration">The duration of the video file. Used to calculate progress</param>
         /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
         /// <returns>Returns true if the conversion was successful</returns>
-        private bool ToMp3(string videoPath, string audioPath, TimeSpan duration, uint bitrate = 320)
+        private bool ToMp3(string videoPath, string audioPath, TimeSpan duration, VideoData videoData, uint bitrate = 320)
         {
             Console.Clear();
             Console.WriteLine("Converting video to mp3 at a bitrate of {0}kbit/s", bitrate);
@@ -324,6 +344,7 @@ namespace YouTubeAudioExtractormatic
                             {
                                 TimeSpan timeConverted = TimeSpan.Parse(part.Replace("time=", ""));
                                 double percentage = ((double)timeConverted.Ticks / (double)duration.Ticks) * 100;
+                                videoData.SetConvertProgress(percentage);
                                 Console.WriteLine((int)percentage + "%");
                                 break;
                             }
