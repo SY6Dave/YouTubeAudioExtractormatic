@@ -227,6 +227,7 @@ namespace YouTubeAudioExtractormatic
                                     {
                                         bytes.Write(buffer, 0, read);
                                         video.SetDownloadProgress((bytes.Length * 100 / len));
+                                        if (guiForm != null) guiForm.InvalidateList();
                                     }
                                     else
                                     {
@@ -345,7 +346,7 @@ namespace YouTubeAudioExtractormatic
                                 TimeSpan timeConverted = TimeSpan.Parse(part.Replace("time=", ""));
                                 double percentage = ((double)timeConverted.Ticks / (double)duration.Ticks) * 100;
                                 videoData.SetConvertProgress(percentage);
-                                Console.WriteLine((int)percentage + "%");
+                                if (guiForm != null) guiForm.InvalidateList();
                                 break;
                             }
                         }
