@@ -14,14 +14,17 @@ namespace YouTubeAudioExtractormatic
 {
     public partial class frmMain : Form
     {
+        public static Color back = Color.FromArgb(66, 59, 76);
+        public static Color dark = Color.FromArgb(56, 49, 66);
+        public static Color light = Color.FromArgb(96, 91, 104);
+        public static Color lighter = Color.FromArgb(144, 140, 150);
+        public static Color red = Color.FromArgb(193, 39, 45);
+
         ThreadHandler threadHandler;
         Downloader downloader;
         YoutubeGrabber grabber;
         uint selectedBitrate;
         bool selectAll = false;
-        Color light = Color.FromArgb(96, 91, 104);
-        Color lighter = Color.FromArgb(144, 140, 150);
-        Color red = Color.FromArgb(193, 39, 45);
 
         public frmMain(ThreadHandler threadHandler)
         {
@@ -31,8 +34,8 @@ namespace YouTubeAudioExtractormatic
             selectedBitrate = 256;
             InitializeComponent();
 
-            BackColor = Color.FromArgb(66, 59, 76);
-            lstVideo.BackColor = Color.FromArgb(56, 49, 66);
+            BackColor = back;
+            lstVideo.BackColor = dark;
 
             btnDownload.BackColor = red;
             btnSearch.BackColor = red;
@@ -49,7 +52,6 @@ namespace YouTubeAudioExtractormatic
             rb256.ForeColor = lighter;
             rb320.ForeColor = lighter;
             rbVideo.ForeColor = lighter;
-            lblNote.ForeColor = lighter;
             btnOpen.ForeColor = lighter;
             lblMsg.ForeColor = lighter;
             lblAuthor.ForeColor = lighter;
@@ -197,22 +199,30 @@ namespace YouTubeAudioExtractormatic
         {
             var radioButton = (RadioButton)sender;
 
-            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 0, 12, 16));
-            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 3, 11, 11));
+            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 3, 12, 16));
+            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 6, 11, 11));
 
             if (radioButton.Checked)
-                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 5, 7, 7));
+                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 8, 7, 7));
         }
 
         private void CheckBoxPaint(object sender, PaintEventArgs e)
         {
             var checkbox = (CheckBox)sender;
 
-            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 0, 12, 16));
-            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 3, 11, 11));
+            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 3, 12, 16));
+            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 6, 11, 11));
 
             if (checkbox.Checked)
-                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 5, 7, 7));
+                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 8, 7, 7));
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+
+            CustomScrollbar scrollBar = new CustomScrollbar(lstVideo);
+            Controls.Add(scrollBar);
+            scrollBar.BringToFront();
         }
     }
 }

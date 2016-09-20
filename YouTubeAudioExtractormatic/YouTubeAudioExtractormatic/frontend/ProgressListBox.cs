@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace YouTubeAudioExtractormatic
 {
@@ -38,19 +39,26 @@ namespace YouTubeAudioExtractormatic
             bool selected = GetItemChecked(e.Index);
             
             bounds.Height -= 4;
+            bounds.Width -= 4;
             bounds.Y += 2;
+            bounds.X += 2;
 
             double dlProgressWidth = bounds.Width / 100.0 * 85.0;
             double convProgressWidth = bounds.Width / 100.0 * 15.0;
 
             g.FillRectangle(new SolidBrush(BackColor), e.Bounds);
-            
-            if (selected) g.FillRectangle(new SolidBrush(colSelected), bounds);
 
-            g.FillRectangle(new SolidBrush(colProgress), new Rectangle(bounds.X, bounds.Y, (int)Math.Ceiling(dlProgressWidth / 100.0 * data.DownloadProgress), bounds.Height));
-            g.FillRectangle(new SolidBrush(colProgress2), new Rectangle(bounds.X + (int)dlProgressWidth, bounds.Y, (int)Math.Ceiling(convProgressWidth / 100.0 * data.ConvertProgress), bounds.Height));
+            LinearGradientBrush backBrush = new LinearGradientBrush(new Point(0, 0), new Point(bounds.Width + 2, 0), colSelected, BackColor);
+            if (selected) g.FillRectangle(backBrush, bounds);
 
-            g.DrawString(text, e.Font, Brushes.White, bounds.Left + 20, bounds.Top + bounds.Height/4, StringFormat.GenericDefault);
+            g.FillRectangle(new SolidBrush(colProgress), new Rectangle(bounds.X, bounds.Y, (int)Math.Round(dlProgressWidth / 100.0 * data.DownloadProgress), bounds.Height));
+            g.FillRectangle(new SolidBrush(colProgress2), new Rectangle(bounds.X + (int)dlProgressWidth, bounds.Y, (int)Math.Round(convProgressWidth / 100.0 * data.ConvertProgress), bounds.Height));
+
+            StringFormat stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Near;
+            stringFormat.LineAlignment = StringAlignment.Center;
+
+            g.DrawString(text, e.Font, Brushes.White, new Rectangle(bounds.Left + 20, bounds.Top, bounds.Width - 20, bounds.Height), stringFormat);
         }
 
         /// <summary>
