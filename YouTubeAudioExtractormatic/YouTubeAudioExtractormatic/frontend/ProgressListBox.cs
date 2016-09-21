@@ -48,8 +48,21 @@ namespace YouTubeAudioExtractormatic
 
             g.FillRectangle(new SolidBrush(BackColor), e.Bounds);
 
-            LinearGradientBrush backBrush = new LinearGradientBrush(new Point(0, 0), new Point(bounds.Width + 2, 0), colSelected, BackColor);
-            if (selected) g.FillRectangle(backBrush, bounds);
+            LinearGradientBrush backBrush;
+            
+            if (data.DownloadFailed)
+            {
+                backBrush = new LinearGradientBrush(new Point(0, 0), new Point(bounds.Width + 2, 0), Color.FromArgb(120, 0, 0), BackColor);
+                g.FillRectangle(backBrush, bounds);
+            }
+            else
+            {
+                if (selected)
+                {
+                    backBrush = new LinearGradientBrush(new Point(0, 0), new Point(bounds.Width + 2, 0), colSelected, BackColor);
+                    g.FillRectangle(backBrush, bounds);
+                }
+            }
 
             g.FillRectangle(new SolidBrush(colProgress), new Rectangle(bounds.X, bounds.Y, (int)Math.Round(dlProgressWidth / 100.0 * data.DownloadProgress), bounds.Height));
             g.FillRectangle(new SolidBrush(colProgress2), new Rectangle(bounds.X + (int)dlProgressWidth, bounds.Y, (int)Math.Round(convProgressWidth / 100.0 * data.ConvertProgress), bounds.Height));
