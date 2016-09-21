@@ -95,11 +95,17 @@
     <Compile Include="backend\UrlParser.cs" />
     <Compile Include="backend\youtube_api\VideoData.cs" />
     <Compile Include="backend\youtube_api\YoutubeGrabber.cs" />
+    <Compile Include="frontend\CustomScrollbar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="frontend\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frontend\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frontend\ProgressListBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
