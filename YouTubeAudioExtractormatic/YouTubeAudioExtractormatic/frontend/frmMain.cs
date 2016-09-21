@@ -199,22 +199,22 @@ namespace YouTubeAudioExtractormatic
         {
             var radioButton = (RadioButton)sender;
 
-            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 3, 12, 16));
-            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 6, 11, 11));
+            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 0, 12, 16));
+            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 3, 11, 11));
 
             if (radioButton.Checked)
-                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 8, 7, 7));
+                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 5, 7, 7));
         }
 
         private void CheckBoxPaint(object sender, PaintEventArgs e)
         {
             var checkbox = (CheckBox)sender;
 
-            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 3, 12, 16));
-            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 6, 11, 11));
+            e.Graphics.FillRectangle(new SolidBrush(BackColor), new Rectangle(0, 0, 12, 16));
+            e.Graphics.FillRectangle(new SolidBrush(light), new Rectangle(0, 3, 11, 11));
 
             if (checkbox.Checked)
-                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 8, 7, 7));
+                e.Graphics.FillRectangle(Brushes.Red, new Rectangle(2, 5, 7, 7));
         }
 
         private void frmMain_Load(object sender, EventArgs e)

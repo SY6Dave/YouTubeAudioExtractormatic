@@ -47,8 +47,8 @@
             this.btnOpen = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.lstVideo = new YouTubeAudioExtractormatic.ProgressListBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.ssMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -61,10 +61,10 @@
             this.ssMain.BackColor = System.Drawing.Color.Transparent;
             this.ssMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblAuthor});
-            this.ssMain.Location = new System.Drawing.Point(0, 491);
+            this.ssMain.Location = new System.Drawing.Point(0, 494);
             this.ssMain.Name = "ssMain";
             this.ssMain.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ssMain.Size = new System.Drawing.Size(761, 25);
+            this.ssMain.Size = new System.Drawing.Size(761, 22);
             this.ssMain.SizingGrip = false;
             this.ssMain.TabIndex = 0;
             this.ssMain.Text = "statusStrip1";
@@ -72,13 +72,13 @@
             // lblAuthor
             // 
             this.lblAuthor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.lblAuthor.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAuthor.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAuthor.IsLink = true;
             this.lblAuthor.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lblAuthor.LinkColor = System.Drawing.Color.White;
             this.lblAuthor.Name = "lblAuthor";
             this.lblAuthor.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lblAuthor.Size = new System.Drawing.Size(111, 20);
+            this.lblAuthor.Size = new System.Drawing.Size(133, 17);
             this.lblAuthor.Tag = "http://www.davidmortiboy.com";
             this.lblAuthor.Text = "© David Mortiboy 2016";
             this.lblAuthor.VisitedLinkColor = System.Drawing.Color.Red;
@@ -88,11 +88,11 @@
             // 
             this.txtUrl.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.txtUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtUrl.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUrl.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtUrl.ForeColor = System.Drawing.Color.White;
-            this.txtUrl.Location = new System.Drawing.Point(44, 3);
+            this.txtUrl.Location = new System.Drawing.Point(44, 8);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(424, 26);
+            this.txtUrl.Size = new System.Drawing.Size(424, 20);
             this.txtUrl.TabIndex = 1;
             this.txtUrl.Text = "this is some text";
             this.txtUrl.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtUrl_KeyPress);
@@ -118,11 +118,11 @@
             this.rb96.FlatAppearance.BorderSize = 0;
             this.rb96.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
             this.rb96.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rb96.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rb96.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rb96.ForeColor = System.Drawing.Color.DimGray;
             this.rb96.Location = new System.Drawing.Point(3, 35);
             this.rb96.Name = "rb96";
-            this.rb96.Size = new System.Drawing.Size(111, 24);
+            this.rb96.Size = new System.Drawing.Size(132, 17);
             this.rb96.TabIndex = 3;
             this.rb96.Text = "96 kbit/s - Lowest";
             this.rb96.UseVisualStyleBackColor = false;
@@ -135,11 +135,11 @@
             this.rb128.FlatAppearance.BorderSize = 0;
             this.rb128.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
             this.rb128.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rb128.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rb128.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rb128.ForeColor = System.Drawing.Color.DimGray;
-            this.rb128.Location = new System.Drawing.Point(125, 5);
+            this.rb128.Location = new System.Drawing.Point(165, 5);
             this.rb128.Name = "rb128";
-            this.rb128.Size = new System.Drawing.Size(101, 24);
+            this.rb128.Size = new System.Drawing.Size(120, 17);
             this.rb128.TabIndex = 4;
             this.rb128.Text = "128 kbit/s - Low";
             this.rb128.UseVisualStyleBackColor = false;
@@ -152,11 +152,11 @@
             this.rb192.FlatAppearance.BorderSize = 0;
             this.rb192.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
             this.rb192.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rb192.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rb192.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rb192.ForeColor = System.Drawing.Color.DimGray;
-            this.rb192.Location = new System.Drawing.Point(125, 35);
+            this.rb192.Location = new System.Drawing.Point(165, 35);
             this.rb192.Name = "rb192";
-            this.rb192.Size = new System.Drawing.Size(115, 24);
+            this.rb192.Size = new System.Drawing.Size(138, 17);
             this.rb192.TabIndex = 5;
             this.rb192.Text = "192 kbit/s - Medium";
             this.rb192.UseVisualStyleBackColor = false;
@@ -170,11 +170,11 @@
             this.rb256.FlatAppearance.BorderSize = 0;
             this.rb256.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
             this.rb256.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rb256.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rb256.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rb256.ForeColor = System.Drawing.Color.DimGray;
-            this.rb256.Location = new System.Drawing.Point(250, 5);
+            this.rb256.Location = new System.Drawing.Point(326, 5);
             this.rb256.Name = "rb256";
-            this.rb256.Size = new System.Drawing.Size(103, 24);
+            this.rb256.Size = new System.Drawing.Size(126, 17);
             this.rb256.TabIndex = 6;
             this.rb256.TabStop = true;
             this.rb256.Text = "256 kbit/s - High";
@@ -188,11 +188,11 @@
             this.rb320.FlatAppearance.BorderSize = 0;
             this.rb320.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
             this.rb320.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rb320.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rb320.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rb320.ForeColor = System.Drawing.Color.DimGray;
-            this.rb320.Location = new System.Drawing.Point(250, 35);
+            this.rb320.Location = new System.Drawing.Point(326, 35);
             this.rb320.Name = "rb320";
-            this.rb320.Size = new System.Drawing.Size(116, 24);
+            this.rb320.Size = new System.Drawing.Size(144, 17);
             this.rb320.TabIndex = 7;
             this.rb320.Text = "320 kbit/s - Highest";
             this.rb320.UseVisualStyleBackColor = false;
@@ -201,11 +201,11 @@
             // lblUrl
             // 
             this.lblUrl.AutoSize = true;
-            this.lblUrl.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUrl.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUrl.ForeColor = System.Drawing.Color.LightGray;
-            this.lblUrl.Location = new System.Drawing.Point(13, 5);
+            this.lblUrl.Location = new System.Drawing.Point(13, 10);
             this.lblUrl.Name = "lblUrl";
-            this.lblUrl.Size = new System.Drawing.Size(25, 20);
+            this.lblUrl.Size = new System.Drawing.Size(25, 13);
             this.lblUrl.TabIndex = 8;
             this.lblUrl.Text = "URL";
             // 
@@ -231,11 +231,11 @@
             this.rbVideo.FlatAppearance.BorderSize = 0;
             this.rbVideo.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
             this.rbVideo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rbVideo.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbVideo.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rbVideo.ForeColor = System.Drawing.Color.DimGray;
             this.rbVideo.Location = new System.Drawing.Point(3, 5);
             this.rbVideo.Name = "rbVideo";
-            this.rbVideo.Size = new System.Drawing.Size(87, 24);
+            this.rbVideo.Size = new System.Drawing.Size(102, 17);
             this.rbVideo.TabIndex = 12;
             this.rbVideo.Text = "Save as video";
             this.rbVideo.UseVisualStyleBackColor = false;
@@ -249,12 +249,12 @@
             this.chkAll.FlatAppearance.BorderSize = 0;
             this.chkAll.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
             this.chkAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.chkAll.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkAll.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkAll.ForeColor = System.Drawing.Color.DimGray;
-            this.chkAll.Location = new System.Drawing.Point(65, 137);
+            this.chkAll.Location = new System.Drawing.Point(65, 144);
             this.chkAll.Margin = new System.Windows.Forms.Padding(65, 3, 60, 3);
             this.chkAll.Name = "chkAll";
-            this.chkAll.Size = new System.Drawing.Size(63, 24);
+            this.chkAll.Size = new System.Drawing.Size(83, 17);
             this.chkAll.TabIndex = 14;
             this.chkAll.Text = "Select all";
             this.chkAll.UseVisualStyleBackColor = false;
@@ -314,7 +314,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(761, 491);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(761, 494);
             this.tableLayoutPanel1.TabIndex = 18;
             // 
             // panel2
@@ -328,6 +328,20 @@
             this.panel2.Size = new System.Drawing.Size(513, 33);
             this.panel2.TabIndex = 19;
             // 
+            // lstVideo
+            // 
+            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstVideo.CheckOnClick = true;
+            this.lstVideo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstVideo.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstVideo.FormattingEnabled = true;
+            this.lstVideo.IntegralHeight = false;
+            this.lstVideo.Location = new System.Drawing.Point(60, 167);
+            this.lstVideo.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
+            this.lstVideo.Name = "lstVideo";
+            this.lstVideo.Size = new System.Drawing.Size(641, 193);
+            this.lstVideo.TabIndex = 15;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.rbVideo);
@@ -339,25 +353,11 @@
             this.panel1.Controls.Add(this.rb192);
             this.panel1.Controls.Add(this.rb256);
             this.panel1.Controls.Add(this.rb320);
-            this.panel1.Location = new System.Drawing.Point(60, 363);
+            this.panel1.Location = new System.Drawing.Point(60, 366);
             this.panel1.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(463, 125);
+            this.panel1.Size = new System.Drawing.Size(511, 125);
             this.panel1.TabIndex = 19;
-            // 
-            // lstVideo
-            // 
-            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lstVideo.CheckOnClick = true;
-            this.lstVideo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstVideo.Font = new System.Drawing.Font("Agency FB", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstVideo.FormattingEnabled = true;
-            this.lstVideo.IntegralHeight = false;
-            this.lstVideo.Location = new System.Drawing.Point(60, 167);
-            this.lstVideo.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
-            this.lstVideo.Name = "lstVideo";
-            this.lstVideo.Size = new System.Drawing.Size(641, 190);
-            this.lstVideo.TabIndex = 15;
             // 
             // frmMain
             // 
