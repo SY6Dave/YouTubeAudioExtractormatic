@@ -247,6 +247,7 @@ namespace YouTubeAudioExtractormatic
                             //check integrity of byte array
                             if (bytes.Length != len)
                             {
+                                video.DownloadFailed = true;
                                 if(guiForm != null)
                                 {
                                     guiForm.UpdateMsgLbl("File content is corrupted!");
@@ -255,7 +256,6 @@ namespace YouTubeAudioExtractormatic
                                 }
                                 else
                                 {
-                                    video.DownloadFailed = true;
                                     throw new WebException("File content is corrupted.");
                                 }
                             }
@@ -310,12 +310,10 @@ namespace YouTubeAudioExtractormatic
         /// <returns>Returns true if the conversion was successful</returns>
         private bool ToMp3(string videoPath, string audioPath, TimeSpan duration, VideoData videoData, uint bitrate = 320)
         {
-            Console.Clear();
-            Console.WriteLine("Converting video to mp3 at a bitrate of {0}kbit/s", bitrate);
             //setup an ffmpeg process
             var ffmpeg = new Process
             {
-                StartInfo = { UseShellExecute = false, RedirectStandardError = true, FileName = ffmpegPath }
+                StartInfo = { UseShellExecute = false, RedirectStandardError = true, FileName = ffmpegPath , CreateNoWindow = true}
             };
 
             var arguments =
@@ -334,7 +332,7 @@ namespace YouTubeAudioExtractormatic
                 if (!ffmpeg.Start())
                 {
                     videoData.DownloadFailed = true;
-                    Console.WriteLine("Unable to start ffmpeg!");
+                    Debug.WriteLine("Unable to start ffmpeg!");
                     return false;
                 }
                 var reader = ffmpeg.StandardError;
@@ -359,16 +357,14 @@ namespace YouTubeAudioExtractormatic
                     }
                 }
             }
-            catch(Exception e)
+            catch
             {
                 videoData.DownloadFailed = true;
-                Console.WriteLine("An error occurred while converting\n\n{0}", e.Message);
                 return false; //exception was thrown, conversion failed
             }
 
             ffmpeg.Close();
 
-            Console.WriteLine("Converted!");
             return true;
         }
 
