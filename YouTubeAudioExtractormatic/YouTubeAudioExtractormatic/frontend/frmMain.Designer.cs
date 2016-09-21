@@ -47,8 +47,8 @@
             this.btnOpen = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.lstVideo = new YouTubeAudioExtractormatic.ProgressListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lstVideo = new YouTubeAudioExtractormatic.ProgressListBox();
             this.ssMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -90,7 +90,7 @@
             this.txtUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtUrl.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtUrl.ForeColor = System.Drawing.Color.White;
-            this.txtUrl.Location = new System.Drawing.Point(44, 8);
+            this.txtUrl.Location = new System.Drawing.Point(44, 5);
             this.txtUrl.Name = "txtUrl";
             this.txtUrl.Size = new System.Drawing.Size(424, 20);
             this.txtUrl.TabIndex = 1;
@@ -203,7 +203,7 @@
             this.lblUrl.AutoSize = true;
             this.lblUrl.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblUrl.ForeColor = System.Drawing.Color.LightGray;
-            this.lblUrl.Location = new System.Drawing.Point(13, 10);
+            this.lblUrl.Location = new System.Drawing.Point(13, 7);
             this.lblUrl.Name = "lblUrl";
             this.lblUrl.Size = new System.Drawing.Size(25, 13);
             this.lblUrl.TabIndex = 8;
@@ -216,7 +216,7 @@
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearch.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.Color.White;
-            this.btnSearch.Location = new System.Drawing.Point(474, 5);
+            this.btnSearch.Location = new System.Drawing.Point(476, 3);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(23, 23);
             this.btnSearch.TabIndex = 10;
@@ -328,20 +328,6 @@
             this.panel2.Size = new System.Drawing.Size(513, 33);
             this.panel2.TabIndex = 19;
             // 
-            // lstVideo
-            // 
-            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lstVideo.CheckOnClick = true;
-            this.lstVideo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstVideo.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstVideo.FormattingEnabled = true;
-            this.lstVideo.IntegralHeight = false;
-            this.lstVideo.Location = new System.Drawing.Point(60, 167);
-            this.lstVideo.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
-            this.lstVideo.Name = "lstVideo";
-            this.lstVideo.Size = new System.Drawing.Size(641, 193);
-            this.lstVideo.TabIndex = 15;
-            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.rbVideo);
@@ -358,6 +344,20 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(511, 125);
             this.panel1.TabIndex = 19;
+            // 
+            // lstVideo
+            // 
+            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstVideo.CheckOnClick = true;
+            this.lstVideo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstVideo.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstVideo.FormattingEnabled = true;
+            this.lstVideo.IntegralHeight = false;
+            this.lstVideo.Location = new System.Drawing.Point(60, 167);
+            this.lstVideo.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
+            this.lstVideo.Name = "lstVideo";
+            this.lstVideo.Size = new System.Drawing.Size(641, 193);
+            this.lstVideo.TabIndex = 15;
             // 
             // frmMain
             // 
