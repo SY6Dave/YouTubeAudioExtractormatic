@@ -47,6 +47,9 @@ namespace YouTubeAudioExtractormatic
         #endregion
 
         ThreadHandler threadHandler;
+        static int maxConcurrentDownloads = 8;
+        int numConcurrentDownloads = 0;
+        object concurrentLocker = new object();
         static string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
         string downloadsPath = Path.Combine(applicationPath, "Downloads");
         public string DownloadsPath
@@ -148,6 +151,12 @@ namespace YouTubeAudioExtractormatic
                 video.Url = urlParser.Url;
 
                 object[] argsArray = { video, bitrate };
+
+                while (numConcurrentDownloads >= maxConcurrentDownloads)
+                {
+                    //wait
+                }
+
                 Thread downloadThread = new Thread(BeginDownload);
                 threadHandler.AddActive(downloadThread);
                 downloadThread.Start(argsArray);
@@ -160,6 +169,11 @@ namespace YouTubeAudioExtractormatic
         /// <param name="threadArgs">An object array that must contain a string url and a uint32 bitrate</param>
         private void BeginDownload(object threadArgs)
         {
+            lock(concurrentLocker)
+            {
+                numConcurrentDownloads++;
+            }
+
             object[] argsArray = (object[])threadArgs;
             VideoData video;
             uint bitrate;
@@ -259,6 +273,7 @@ namespace YouTubeAudioExtractormatic
                             {
                                 if(bitrate == 0) //video
                                 {
+                                    video.SetConvertProgress(100);
                                     string videoPath = Path.Combine(downloadsPath, highestQuality.FullName);
                                     File.WriteAllBytes(videoPath, bytes.ToArray());
                                     if (guiForm != null)
@@ -292,6 +307,11 @@ namespace YouTubeAudioExtractormatic
                         }
                     }
                 }
+            }
+
+            lock (concurrentLocker)
+            {
+                numConcurrentDownloads--;
             }
         }
 
