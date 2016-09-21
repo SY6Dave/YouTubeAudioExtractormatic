@@ -23,6 +23,7 @@ namespace YouTubeAudioExtractormatic
         public string Title { get { return title; } }
         public double DownloadProgress { get { return downloadProgress; } }
         public double ConvertProgress { get { return convertProgress; } }
+        public bool DownloadFailed;
 
         public VideoData(string id, string title)
         {
@@ -30,6 +31,7 @@ namespace YouTubeAudioExtractormatic
             this.id = id;
             this.title = title;
             this.downloadProgress = 0.0;
+            this.DownloadFailed = false;
         }
 
         public override string ToString()

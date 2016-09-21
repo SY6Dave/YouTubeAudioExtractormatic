@@ -47,9 +47,6 @@ namespace YouTubeAudioExtractormatic
         #endregion
 
         ThreadHandler threadHandler;
-        static int maxConcurrentDownloads = 8;
-        int numConcurrentDownloads = 0;
-        object concurrentLocker = new object();
         static string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
         string downloadsPath = Path.Combine(applicationPath, "Downloads");
         public string DownloadsPath
@@ -151,12 +148,6 @@ namespace YouTubeAudioExtractormatic
                 video.Url = urlParser.Url;
 
                 object[] argsArray = { video, bitrate };
-
-                while (numConcurrentDownloads >= maxConcurrentDownloads)
-                {
-                    //wait
-                }
-
                 Thread downloadThread = new Thread(BeginDownload);
                 threadHandler.AddActive(downloadThread);
                 downloadThread.Start(argsArray);
@@ -169,11 +160,6 @@ namespace YouTubeAudioExtractormatic
         /// <param name="threadArgs">An object array that must contain a string url and a uint32 bitrate</param>
         private void BeginDownload(object threadArgs)
         {
-            lock(concurrentLocker)
-            {
-                numConcurrentDownloads++;
-            }
-
             object[] argsArray = (object[])threadArgs;
             VideoData video;
             uint bitrate;
@@ -190,6 +176,7 @@ namespace YouTubeAudioExtractormatic
                 }
                 catch(ArgumentException)
                 {
+                    video.DownloadFailed = true;
                     //invalid url
                     if(guiForm != null)
                     {
@@ -208,6 +195,7 @@ namespace YouTubeAudioExtractormatic
                 }
                 catch
                 {
+                    video.DownloadFailed = true;
                     if(guiForm != null)
                     {
                         guiForm.UpdateMsgLbl("Unable to download video");
@@ -250,6 +238,7 @@ namespace YouTubeAudioExtractormatic
                                 }
                                 catch
                                 {
+                                    video.DownloadFailed = true;
                                     //thread aborted
                                     return;
                                 }
@@ -266,6 +255,7 @@ namespace YouTubeAudioExtractormatic
                                 }
                                 else
                                 {
+                                    video.DownloadFailed = true;
                                     throw new WebException("File content is corrupted.");
                                 }
                             }
@@ -308,11 +298,6 @@ namespace YouTubeAudioExtractormatic
                     }
                 }
             }
-
-            lock (concurrentLocker)
-            {
-                numConcurrentDownloads--;
-            }
         }
 
         /// <summary>
@@ -348,6 +333,7 @@ namespace YouTubeAudioExtractormatic
                 //try to invoke ffmpeg
                 if (!ffmpeg.Start())
                 {
+                    videoData.DownloadFailed = true;
                     Console.WriteLine("Unable to start ffmpeg!");
                     return false;
                 }
@@ -375,6 +361,7 @@ namespace YouTubeAudioExtractormatic
             }
             catch(Exception e)
             {
+                videoData.DownloadFailed = true;
                 Console.WriteLine("An error occurred while converting\n\n{0}", e.Message);
                 return false; //exception was thrown, conversion failed
             }
