@@ -47,6 +47,7 @@ namespace YouTubeAudioExtractormatic
         #endregion
 
         ThreadHandler threadHandler;
+        private List<Thread> downloadThreads;
         static string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
         string downloadsPath = Path.Combine(applicationPath, "Downloads");
         public string DownloadsPath
@@ -69,6 +70,8 @@ namespace YouTubeAudioExtractormatic
             }
         }
         private frmMain guiForm;
+        private List<VideoData> pendingDownloads;
+        object downloadLocker = new object();
 
         /// <summary>
         /// Verifies that there is a directory set up for downloads
@@ -78,19 +81,29 @@ namespace YouTubeAudioExtractormatic
         {
             this.threadHandler = threadHandler;
             this.guiForm = callingForm;
-
-            //check ffmpeg in right place
-            if(!File.Exists(ffmpegPath))
+            this.pendingDownloads = new List<VideoData>();
+            
+            this.downloadThreads = new List<Thread>();
+            for (int i = 0; i < 4; i++)
             {
-                if (guiForm != null)
-                {
-                    guiForm.UpdateMsgLbl("ffmpeg.exe not found in lib folder!");
-                }
-                else
-                {
-                    throw new FileNotFoundException("ffmpeg.exe not found in lib folder!");
-                }
+                Thread download = new Thread(WaitForDownload);
+                downloadThreads.Add(download);
+                threadHandler.AddActive(download);
+                download.Start();
             }
+
+                //check ffmpeg in right place
+                if (!File.Exists(ffmpegPath))
+                {
+                    if (guiForm != null)
+                    {
+                        guiForm.UpdateMsgLbl("ffmpeg.exe not found in lib folder!");
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException("ffmpeg.exe not found in lib folder!");
+                    }
+                }
 
             //check if downloads folder is there and try to create it if not
             if(!Directory.Exists(downloadsPath))
@@ -113,72 +126,61 @@ namespace YouTubeAudioExtractormatic
             }
         }
 
-        /// <summary>
-        /// Invoke a thread to download a given YouTube video (or as an mp3 if provided with a bitrate)
-        /// </summary>
-        /// <param name="url">Video URL</param>
-        /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
-        public void BeginDownloadThread(string url, uint bitrate = 0)
+        private void WaitForDownload()
         {
-            if(!Directory.Exists(downloadsPath))
+            for (; ; )
             {
-                Directory.CreateDirectory(downloadsPath);
+                Debug.WriteLine(Thread.CurrentThread.ManagedThreadId + " thread waiting for download");
+                try
+                {
+                    VideoData video;
+                    lock (downloadLocker)
+                    {
+                        while (pendingDownloads.Count == 0)
+                        {
+                            Thread.Sleep(10);
+                        }
+                        Debug.WriteLine(Thread.CurrentThread.ManagedThreadId + " thread found pending download");
+                        video = pendingDownloads.First();
+                        pendingDownloads.Remove(video);
+                    }
+                    Download(video);
+                }
+                catch (ThreadAbortException)
+                {
+                    return;
+                }
             }
-
-            UrlParser urlParser = new UrlParser(url);
-            url = urlParser.Url;
-
-            object[] argsArray = {url, bitrate};
-            Thread downloadThread = new Thread(BeginDownload);
-            threadHandler.AddActive(downloadThread);
-            downloadThread.Start(argsArray);
         }
 
-        public void BeginDownloadThread(System.Windows.Forms.CheckedListBox.CheckedItemCollection selectedVideos, uint bitrate = 0)
+        public void SetPendingDownloads(System.Windows.Forms.CheckedListBox.CheckedItemCollection videoCollection, uint bitrate)
         {
-            if (!Directory.Exists(downloadsPath))
-            {
-                Directory.CreateDirectory(downloadsPath);
-            }
-
-            foreach(var item in selectedVideos)
+            foreach (var item in videoCollection)
             {
                 VideoData video = (VideoData)item;
                 UrlParser urlParser = new UrlParser(video.Url);
                 video.Url = urlParser.Url;
+                video.SetDesiredBirtate(bitrate);
 
-                object[] argsArray = { video, bitrate };
-                Thread downloadThread = new Thread(BeginDownload);
-                threadHandler.AddActive(downloadThread);
-                downloadThread.Start(argsArray);
+                pendingDownloads.Add(video);
             }
         }
 
-        /// <summary>
-        /// Download a YouTube video based on the given url and bitrate in the object array
-        /// </summary>
-        /// <param name="threadArgs">An object array that must contain a string url and a uint32 bitrate</param>
-        private void BeginDownload(object threadArgs)
+        private void Download(VideoData video)
         {
-            object[] argsArray = (object[])threadArgs;
-            VideoData video;
-            uint bitrate;
-            video = (VideoData)argsArray[0];
-            bitrate = (uint)argsArray[1];
-
-            using(var cli = Client.For(new YouTube())) //use a libvideo client to get video metadata
+            using (var cli = Client.For(new YouTube())) //use a libvideo client to get video metadata
             {
-                IEnumerable<YouTubeVideo> downloadLinks  = null;
+                IEnumerable<YouTubeVideo> downloadLinks = null;
 
                 try
                 {
                     downloadLinks = cli.GetAllVideos(video.Url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     video.DownloadFailed = true;
                     //invalid url
-                    if(guiForm != null)
+                    if (guiForm != null)
                     {
                         guiForm.UpdateMsgLbl("Invalid URL!");
                     }
@@ -196,7 +198,7 @@ namespace YouTubeAudioExtractormatic
                 catch
                 {
                     video.DownloadFailed = true;
-                    if(guiForm != null)
+                    if (guiForm != null)
                     {
                         guiForm.UpdateMsgLbl("Unable to download video");
                     }
@@ -218,8 +220,9 @@ namespace YouTubeAudioExtractormatic
                     using (var stream = response.GetResponseStream())
                     {
                         stream.ReadTimeout = 5000;
-                        using (var bytes = new MemoryStream())
+                        using (var tempbytes = new TempFile())
                         {
+                            FileStream bytes = new FileStream(tempbytes.Path, FileMode.Open);
                             while (bytes.Length < len)
                             {
                                 try
@@ -227,9 +230,9 @@ namespace YouTubeAudioExtractormatic
                                     var read = stream.Read(buffer, 0, buffer.Length);
                                     if (read > 0)
                                     {
-                                        bytes.Write(buffer, 0, read);
-                                        video.SetDownloadProgress((bytes.Length * 100 / len));
-                                        if (guiForm != null) guiForm.InvalidateList();
+                                       bytes.Write(buffer, 0, read);
+                                       video.SetDownloadProgress((bytes.Length * 100 / len));
+                                       if (guiForm != null) guiForm.InvalidateList();
                                     }
                                     else
                                     {
@@ -248,7 +251,7 @@ namespace YouTubeAudioExtractormatic
                             if (bytes.Length != len)
                             {
                                 video.DownloadFailed = true;
-                                if(guiForm != null)
+                                if (guiForm != null)
                                 {
                                     guiForm.UpdateMsgLbl("File content is corrupted!");
                                     threadHandler.RemoveActive(Thread.CurrentThread);
@@ -261,11 +264,12 @@ namespace YouTubeAudioExtractormatic
                             }
                             else
                             {
-                                if(bitrate == 0) //video
+                                if (video.DesiredBitrate == 0) //video
                                 {
                                     video.SetConvertProgress(100);
                                     string videoPath = Path.Combine(downloadsPath, highestQuality.FullName);
-                                    File.WriteAllBytes(videoPath, bytes.ToArray());
+                                    File.Copy(tempbytes.Path, videoPath, true);
+                                    //File.WriteAllBytes(videoPath, bytes.);
                                     if (guiForm != null)
                                     {
                                         guiForm.UpdateMsgLbl("Successful!");
@@ -274,30 +278,32 @@ namespace YouTubeAudioExtractormatic
                                 else //mp3
                                 {
                                     //create temp video file to convert to mp3 and dispose of when done
-                                    using (var tempVideo = new TempFile())
+                                    //File.WriteAllBytes(tempVideo.Path, bytes.ToArray());
+                                    TimeSpan duration = GetVideoDuration(tempbytes.Path);
+                                    string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
+
+                                    if (guiForm != null)
                                     {
-                                        File.WriteAllBytes(tempVideo.Path, bytes.ToArray());
-                                        TimeSpan duration = GetVideoDuration(tempVideo.Path);
-                                        string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
+                                        guiForm.UpdateMsgLbl("Converting to mp3... Do not close this window!");
+                                    }
 
-                                        if (guiForm != null)
-                                        {
-                                            guiForm.UpdateMsgLbl("Converting to mp3... Do not close this window!");
-                                        }
+                                    ToMp3(tempbytes.Path, audioPath, duration, video, video.DesiredBitrate); //convert to mp3
 
-                                        ToMp3(tempVideo.Path, audioPath, duration, video, bitrate); //convert to mp3
-
-                                        if (guiForm != null)
-                                        {
-                                            guiForm.UpdateMsgLbl("Successful!");
-                                        }
+                                    if (guiForm != null)
+                                    {
+                                        guiForm.UpdateMsgLbl("Successful!");
                                     }
                                 }
                             }
+
+                            bytes.Dispose();
+                            bytes.Close();
                         }
                     }
                 }
             }
+
+            WaitForDownload(); //thread goes back to waiting for another download to begin
         }
 
         /// <summary>

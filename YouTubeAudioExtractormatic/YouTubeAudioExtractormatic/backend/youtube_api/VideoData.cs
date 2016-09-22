@@ -17,6 +17,7 @@ namespace YouTubeAudioExtractormatic
         private string title;
         private double downloadProgress;
         private double convertProgress;
+        private uint desiredBitrate;
 
         public string Url { get { return url; } set { url = value; } }
         public string Id { get { return id; } }
@@ -24,6 +25,7 @@ namespace YouTubeAudioExtractormatic
         public double DownloadProgress { get { return downloadProgress; } }
         public double ConvertProgress { get { return convertProgress; } }
         public bool DownloadFailed;
+        public uint DesiredBitrate { get { return desiredBitrate; } }
 
         public VideoData(string id, string title)
         {
@@ -32,6 +34,7 @@ namespace YouTubeAudioExtractormatic
             this.title = title;
             this.downloadProgress = 0.0;
             this.DownloadFailed = false;
+            this.desiredBitrate = 0;
         }
 
         public override string ToString()
@@ -47,6 +50,11 @@ namespace YouTubeAudioExtractormatic
         public void SetConvertProgress(double progress)
         {
             this.convertProgress = progress;
+        }
+
+        public void SetDesiredBirtate(uint bitrate)
+        {
+            this.desiredBitrate = bitrate;
         }
     }
 }

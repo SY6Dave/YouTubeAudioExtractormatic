@@ -116,7 +116,8 @@ namespace YouTubeAudioExtractormatic
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            downloader.BeginDownloadThread(lstVideo.CheckedItems, selectedBitrate);
+            //downloader.BeginDownloadThread(lstVideo.CheckedItems, selectedBitrate);
+            downloader.SetPendingDownloads(lstVideo.CheckedItems, selectedBitrate);
         }
 
         public void UpdateMsgLbl(string text)
