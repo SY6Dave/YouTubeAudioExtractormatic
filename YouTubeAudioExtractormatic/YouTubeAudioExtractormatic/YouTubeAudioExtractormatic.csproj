@@ -104,6 +104,8 @@
     <Compile Include="frontend\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="frontend\iGui.cs" />
+    <Compile Include="frontend\MainController.cs" />
     <Compile Include="frontend\ProgressListBox.cs">
       <SubType>Component</SubType>
     </Compile>

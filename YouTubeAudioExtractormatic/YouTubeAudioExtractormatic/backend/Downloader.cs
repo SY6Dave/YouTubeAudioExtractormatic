@@ -70,6 +70,8 @@ namespace YouTubeAudioExtractormatic
             }
         }
         private frmMain guiForm;
+        private iGui gui; //to replace frmmain
+
         private List<VideoData> pendingDownloads;
         object downloadLocker = new object();
 
@@ -77,10 +79,10 @@ namespace YouTubeAudioExtractormatic
         /// Verifies that there is a directory set up for downloads
         /// </summary>
         /// <param name="threadHandler">The main program's thread manager</param>
-        public Downloader(ThreadHandler threadHandler, frmMain callingForm)
+        public Downloader(ThreadHandler threadHandler, iGui callingForm)
         {
             this.threadHandler = threadHandler;
-            this.guiForm = callingForm;
+            this.gui = callingForm;
             this.pendingDownloads = new List<VideoData>();
             
             this.downloadThreads = new List<Thread>();

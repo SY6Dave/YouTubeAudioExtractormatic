@@ -12,8 +12,13 @@ using System.Windows.Forms;
 
 namespace YouTubeAudioExtractormatic
 {
-    public partial class frmMain : Form
+    public partial class frmMain : Form, iGui
     {
+        public Action<uint> bitrateChanged { get; set; }
+       // public BitrateChanged bitrateChanged { get; set; }
+
+        public MainController controller { get; set; }
+
         public static Color back = Color.FromArgb(66, 59, 76);
         public static Color dark = Color.FromArgb(56, 49, 66);
         public static Color light = Color.FromArgb(96, 91, 104);
@@ -28,6 +33,8 @@ namespace YouTubeAudioExtractormatic
 
         public frmMain(ThreadHandler threadHandler)
         {
+            controller = new MainController(this);
+
             this.threadHandler = threadHandler;
             downloader = new Downloader(threadHandler, this);
             grabber = new YoutubeGrabber();
@@ -82,31 +89,43 @@ namespace YouTubeAudioExtractormatic
         private void rb96_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 96;
+
+            bitrateChanged(96);
         }
 
         private void rb128_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 128;
+
+            bitrateChanged(128);
         }
 
         private void rb192_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 192;
+
+            bitrateChanged(192);
         }
 
         private void rb256_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 256;
+
+            bitrateChanged(256);
         }
 
         private void rb320_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 320;
+
+            bitrateChanged(320);
         }
 
         private void rbVideo_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 0;
+
+            bitrateChanged(0);
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
