@@ -95,6 +95,7 @@
     <Compile Include="backend\UrlParser.cs" />
     <Compile Include="backend\youtube_api\VideoData.cs" />
     <Compile Include="backend\youtube_api\YoutubeGrabber.cs" />
+    <Compile Include="ExampleCLI.cs" />
     <Compile Include="frontend\CustomScrollbar.cs">
       <SubType>Component</SubType>
     </Compile>

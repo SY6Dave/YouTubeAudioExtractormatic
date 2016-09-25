@@ -217,9 +217,14 @@ namespace YouTubeAudioExtractormatic
                                     var read = stream.Read(buffer, 0, buffer.Length);
                                     if (read > 0)
                                     {
-                                       bytes.Write(buffer, 0, read);
-                                       video.SetDownloadProgress((bytes.Length * 100 / len));
-                                       gui.OnProgressChanged();
+                                        bytes.Write(buffer, 0, read);
+
+                                        double percentage = bytes.Length * 100 / len;
+                                        if (video.DownloadProgress != percentage)
+                                        {
+                                            video.SetDownloadProgress(percentage);
+                                            gui.OnProgressChanged();
+                                        }
                                     }
                                     else
                                     {
@@ -321,8 +326,12 @@ namespace YouTubeAudioExtractormatic
                             {
                                 TimeSpan timeConverted = TimeSpan.Parse(part.Replace("time=", ""));
                                 double percentage = ((double)timeConverted.Ticks / (double)duration.Ticks) * 100;
-                                videoData.SetConvertProgress(percentage);
-                                gui.OnProgressChanged();
+
+                                if (videoData.ConvertProgress != percentage)
+                                {
+                                    videoData.SetConvertProgress(percentage);
+                                    gui.OnProgressChanged();
+                                }
                                 break;
                             }
                         }
@@ -334,6 +343,9 @@ namespace YouTubeAudioExtractormatic
                 videoData.DownloadFailed = true;
                 return false; //exception was thrown, conversion failed
             }
+
+            videoData.SetConvertProgress(100);
+            gui.OnProgressChanged();
 
             ffmpeg.Close();
 
