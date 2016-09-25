@@ -95,6 +95,7 @@
     <Compile Include="backend\UrlParser.cs" />
     <Compile Include="backend\youtube_api\VideoData.cs" />
     <Compile Include="backend\youtube_api\YoutubeGrabber.cs" />
+    <Compile Include="ExampleCLI.cs" />
     <Compile Include="frontend\CustomScrollbar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -104,6 +105,8 @@
     <Compile Include="frontend\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="frontend\iGui.cs" />
+    <Compile Include="frontend\MainController.cs" />
     <Compile Include="frontend\ProgressListBox.cs">
       <SubType>Component</SubType>
     </Compile>

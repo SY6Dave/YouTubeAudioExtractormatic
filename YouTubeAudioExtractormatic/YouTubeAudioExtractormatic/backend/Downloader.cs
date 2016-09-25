@@ -35,10 +35,7 @@ namespace YouTubeAudioExtractormatic
                 handler(this, e);
 
             Debug.WriteLine(downloadProgress); //log current download percentage
-            if(guiForm != null)
-            {
-                guiForm.UpdateMsgLbl(downloadProgress + "% downloaded...");
-            }
+            gui.DisplayMessage(downloadProgress + "% downloaded...");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -69,7 +66,9 @@ namespace YouTubeAudioExtractormatic
                 }
             }
         }
-        private frmMain guiForm;
+
+        private iGui gui;
+
         private List<VideoData> pendingDownloads;
         object downloadLocker = new object();
 
@@ -77,10 +76,10 @@ namespace YouTubeAudioExtractormatic
         /// Verifies that there is a directory set up for downloads
         /// </summary>
         /// <param name="threadHandler">The main program's thread manager</param>
-        public Downloader(ThreadHandler threadHandler, frmMain callingForm)
+        public Downloader(ThreadHandler threadHandler, iGui callingForm)
         {
             this.threadHandler = threadHandler;
-            this.guiForm = callingForm;
+            this.gui = callingForm;
             this.pendingDownloads = new List<VideoData>();
             
             this.downloadThreads = new List<Thread>();
@@ -92,38 +91,33 @@ namespace YouTubeAudioExtractormatic
                 download.Start();
             }
 
-                //check ffmpeg in right place
-                if (!File.Exists(ffmpegPath))
-                {
-                    if (guiForm != null)
-                    {
-                        guiForm.UpdateMsgLbl("ffmpeg.exe not found in lib folder!");
-                    }
-                    else
-                    {
-                        throw new FileNotFoundException("ffmpeg.exe not found in lib folder!");
-                    }
-                }
+            //check ffmpeg in right place
+            if (!File.Exists(ffmpegPath))
+            {
+                gui.DisplayMessage("ffmpeg.exe not found in lib folder!");
+            }
 
             //check if downloads folder is there and try to create it if not
-            if(!Directory.Exists(downloadsPath))
+            try
             {
-                try
-                {
-                    Directory.CreateDirectory(downloadsPath);
-                }
-                catch
-                {
-                    if (guiForm != null)
-                    {
-                        guiForm.UpdateMsgLbl("Unable to create downloads directory!");
-                    }
-                    else
-                    {
-                        throw new DirectoryNotFoundException("Unable to create downloads directory!");
-                    }
-                }
+                VerifyDownloadDirectory();
             }
+            catch
+            {
+                gui.DisplayMessage("Unable to create downloads directory!");
+            }
+        }
+
+        private void VerifyDownloadDirectory()
+        {
+            if(!Directory.Exists(downloadsPath))
+                Directory.CreateDirectory(downloadsPath);
+        }
+
+        public void OpenDownloadDirectory()
+        {
+            VerifyDownloadDirectory();
+            System.Diagnostics.Process.Start(downloadsPath);
         }
 
         private void WaitForDownload()
@@ -153,11 +147,10 @@ namespace YouTubeAudioExtractormatic
             }
         }
 
-        public void SetPendingDownloads(System.Windows.Forms.CheckedListBox.CheckedItemCollection videoCollection, uint bitrate)
+        public void SetPendingDownloads(List<VideoData> videoCollection, uint bitrate)
         {
-            foreach (var item in videoCollection)
+            foreach (var video in videoCollection)
             {
-                VideoData video = (VideoData)item;
                 UrlParser urlParser = new UrlParser(video.Url);
                 video.Url = urlParser.Url;
                 video.SetDesiredBirtate(bitrate);
@@ -180,10 +173,7 @@ namespace YouTubeAudioExtractormatic
                 {
                     video.DownloadFailed = true;
                     //invalid url
-                    if (guiForm != null)
-                    {
-                        guiForm.UpdateMsgLbl("Invalid URL!");
-                    }
+                    gui.DisplayMessage("Invalid URL!");
 
                     threadHandler.RemoveActive(Thread.CurrentThread);
                     Thread.CurrentThread.Abort();
@@ -198,10 +188,7 @@ namespace YouTubeAudioExtractormatic
                 catch
                 {
                     video.DownloadFailed = true;
-                    if (guiForm != null)
-                    {
-                        guiForm.UpdateMsgLbl("Unable to download video");
-                    }
+                    gui.DisplayMessage("Unable to download video");
                     return;
                 }
 
@@ -230,9 +217,14 @@ namespace YouTubeAudioExtractormatic
                                     var read = stream.Read(buffer, 0, buffer.Length);
                                     if (read > 0)
                                     {
-                                       bytes.Write(buffer, 0, read);
-                                       video.SetDownloadProgress((bytes.Length * 100 / len));
-                                       if (guiForm != null) guiForm.InvalidateList();
+                                        bytes.Write(buffer, 0, read);
+
+                                        double percentage = bytes.Length * 100 / len;
+                                        if (video.DownloadProgress != percentage)
+                                        {
+                                            video.SetDownloadProgress(percentage);
+                                            gui.OnProgressChanged();
+                                        }
                                     }
                                     else
                                     {
@@ -251,16 +243,9 @@ namespace YouTubeAudioExtractormatic
                             if (bytes.Length != len)
                             {
                                 video.DownloadFailed = true;
-                                if (guiForm != null)
-                                {
-                                    guiForm.UpdateMsgLbl("File content is corrupted!");
-                                    threadHandler.RemoveActive(Thread.CurrentThread);
-                                    Thread.CurrentThread.Abort();
-                                }
-                                else
-                                {
-                                    throw new WebException("File content is corrupted.");
-                                }
+                                gui.DisplayMessage("File content is corrupted!");
+                                threadHandler.RemoveActive(Thread.CurrentThread);
+                                Thread.CurrentThread.Abort();
                             }
                             else
                             {
@@ -269,30 +254,16 @@ namespace YouTubeAudioExtractormatic
                                     video.SetConvertProgress(100);
                                     string videoPath = Path.Combine(downloadsPath, highestQuality.FullName);
                                     File.Copy(tempbytes.Path, videoPath, true);
-                                    //File.WriteAllBytes(videoPath, bytes.);
-                                    if (guiForm != null)
-                                    {
-                                        guiForm.UpdateMsgLbl("Successful!");
-                                    }
+
+                                    gui.DisplayMessage("Successful!");
                                 }
                                 else //mp3
                                 {
                                     //create temp video file to convert to mp3 and dispose of when done
-                                    //File.WriteAllBytes(tempVideo.Path, bytes.ToArray());
                                     TimeSpan duration = GetVideoDuration(tempbytes.Path);
                                     string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
 
-                                    if (guiForm != null)
-                                    {
-                                        guiForm.UpdateMsgLbl("Converting to mp3... Do not close this window!");
-                                    }
-
                                     ToMp3(tempbytes.Path, audioPath, duration, video, video.DesiredBitrate); //convert to mp3
-
-                                    if (guiForm != null)
-                                    {
-                                        guiForm.UpdateMsgLbl("Successful!");
-                                    }
                                 }
                             }
 
@@ -355,8 +326,12 @@ namespace YouTubeAudioExtractormatic
                             {
                                 TimeSpan timeConverted = TimeSpan.Parse(part.Replace("time=", ""));
                                 double percentage = ((double)timeConverted.Ticks / (double)duration.Ticks) * 100;
-                                videoData.SetConvertProgress(percentage);
-                                if (guiForm != null) guiForm.InvalidateList();
+
+                                if (videoData.ConvertProgress != percentage)
+                                {
+                                    videoData.SetConvertProgress(percentage);
+                                    gui.OnProgressChanged();
+                                }
                                 break;
                             }
                         }
@@ -368,6 +343,9 @@ namespace YouTubeAudioExtractormatic
                 videoData.DownloadFailed = true;
                 return false; //exception was thrown, conversion failed
             }
+
+            videoData.SetConvertProgress(100);
+            gui.OnProgressChanged();
 
             ffmpeg.Close();
 
