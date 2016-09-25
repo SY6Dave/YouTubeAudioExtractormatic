@@ -19,11 +19,16 @@ namespace YouTubeAudioExtractormatic
 
         private uint bitrate;
 
-        public MainController(iGui callingForm)
+        /// <summary>
+        /// Construct a controller which interfaces with a thread manager, video downloader, and the youtube api to provide the core
+        /// functionalities of the application
+        /// </summary>
+        /// <param name="creator">Normally, "this". Pass in a reference to the form/console that has implemented the iGui interface</param>
+        public MainController(iGui creator)
         {
             this.threadManager = new ThreadHandler();
             this.videoRetriever = new YoutubeGrabber();
-            this.videoDownloader = new Downloader(threadManager, callingForm);
+            this.videoDownloader = new Downloader(threadManager, creator);
 
             this.bitrate = 256;
         }
@@ -62,7 +67,7 @@ namespace YouTubeAudioExtractormatic
         /// <returns>Returns a list of VideoData references that can then be passed to the Download method of the MainController</returns>
         public List<VideoData> GetVideos(string query)
         {
-            return new List<VideoData>();
+            return videoRetriever.GetVideosByPlaylist(query);
         }
 
         /// <summary>

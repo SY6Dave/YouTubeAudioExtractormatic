@@ -227,7 +227,7 @@
             this.btnSearch.TabIndex = 10;
             this.btnSearch.Text = "►";
             this.btnSearch.UseVisualStyleBackColor = false;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.Click += new System.EventHandler(this.Search);
             // 
             // rbVideo
             // 

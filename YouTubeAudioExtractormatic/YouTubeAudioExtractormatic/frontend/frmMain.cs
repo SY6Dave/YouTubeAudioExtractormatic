@@ -16,13 +16,15 @@ namespace YouTubeAudioExtractormatic
     {
         public MainController controller { get; set; }
 
+        #region Colors
         public static Color back = Color.FromArgb(66, 59, 76);
         public static Color dark = Color.FromArgb(56, 49, 66);
         public static Color light = Color.FromArgb(96, 91, 104);
         public static Color lighter = Color.FromArgb(144, 140, 150);
         public static Color red = Color.FromArgb(193, 39, 45);
+        #endregion
 
-        bool selectAll = false;
+        private bool selectAll;
 
         public frmMain()
         {
@@ -30,23 +32,36 @@ namespace YouTubeAudioExtractormatic
 
             InitializeComponent();
             SetupColors();
+
+            this.selectAll = false;
         }
 
+        /// <summary>
+        /// Required by iGui. Gets called when download/conversion progress of a video changes
+        /// </summary>
         public void OnProgressChanged()
         {
-            InvalidateList();
+            //refresh the list to display up-to-date progress bars
+            if (lstVideo.InvokeRequired)
+            {
+                lstVideo.BeginInvoke((MethodInvoker)delegate() { lstVideo.Invalidate(); ;}); //in case called from another thread
+            }
+            else
+            {
+                lstVideo.Invalidate();
+            }
         }
 
         private void lblAuthor_Click(object sender, EventArgs e)
         {
             ToolStripLabel lblAuthor = (ToolStripLabel)sender;
-            System.Diagnostics.Process.Start(lblAuthor.Tag.ToString());
+            System.Diagnostics.Process.Start(lblAuthor.Tag.ToString()); //shameless self-promotion
             lblAuthor.LinkVisited = true;
         }
 
         private void frmMain_Closing(object sender, FormClosingEventArgs e)
         {
-            controller.CloseApplication();
+            controller.CloseApplication(); //ensure all threads are safely aborted
         }
 
         private void BitrateChanged(object sender, EventArgs e)
@@ -55,50 +70,50 @@ namespace YouTubeAudioExtractormatic
             controller.SetBitrate(Convert.ToUInt16(rb.Tag));
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void Search(object sender, EventArgs e)
         {
-            Search();
+            chkAll.Checked = false;
+            lstVideo.Items.Clear(); //make sure list is empty before re-populating
+
+            //call the controller to execute the search
+            List<VideoData> searchResult = controller.GetVideos(txtUrl.Text);
+
+            //add videos to list
+            if (searchResult != null)
+            foreach (var video in searchResult)
+            {
+                lstVideo.Items.Add(video);
+            }
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
             List<VideoData> pendingDownloads = new List<VideoData>();
 
+            //cast checked items to VideoData references
             foreach(var item in lstVideo.CheckedItems)
             {
                 pendingDownloads.Add((VideoData)item);
             }
 
-            controller.Download(pendingDownloads);
+            controller.Download(pendingDownloads); //call the controller to begin downloading
         }
 
-        public void UpdateMsgLbl(string text)
+        public void DisplayMessage(string msg)
         {
             if (lblMsg.InvokeRequired)
             {
-                lblMsg.BeginInvoke((MethodInvoker)delegate() { lblMsg.Text = text; ;});
+                lblMsg.BeginInvoke((MethodInvoker)delegate() { lblMsg.Text = msg; ;});
             }
             else
             {
-                lblMsg.Text = text;
-            }
-        }
-
-        public void InvalidateList()
-        {
-            if (lstVideo.InvokeRequired)
-            {
-                lstVideo.BeginInvoke((MethodInvoker)delegate() { lstVideo.Invalidate(); ;});
-            }
-            else
-            {
-                lstVideo.Invalidate();
+                lblMsg.Text = msg;
             }
         }
 
         private void frmMain_Activated(object sender, EventArgs e)
         {
-            txtUrl.Text = Clipboard.GetText();
+            txtUrl.Text = Clipboard.GetText(); //paste the clipboard details whenever the window is re-focused
         }
 
         private void chkAll_CheckedChanged(object sender, EventArgs e)
@@ -112,21 +127,7 @@ namespace YouTubeAudioExtractormatic
         {
             if (e.KeyChar == (char)13)
             {
-                Search();
-            }
-        }
-
-        private void Search()
-        {
-            chkAll.Checked = false;
-            lstVideo.Items.Clear();
-
-            List<VideoData> searchResult = controller.GetVideos(txtUrl.Text);
-            if (searchResult == null) return;
-
-            foreach (var video in searchResult)
-            {
-                lstVideo.Items.Add(video);
+                Search(sender, e);
             }
         }
 
