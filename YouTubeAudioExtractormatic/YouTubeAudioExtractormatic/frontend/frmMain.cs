@@ -25,7 +25,6 @@ namespace YouTubeAudioExtractormatic
         ThreadHandler threadHandler;
         Downloader downloader;
         YoutubeGrabber grabber;
-        uint selectedBitrate;
         bool selectAll = false;
 
         public frmMain(ThreadHandler threadHandler)
@@ -35,7 +34,6 @@ namespace YouTubeAudioExtractormatic
             this.threadHandler = threadHandler;
             downloader = new Downloader(threadHandler, this);
             grabber = new YoutubeGrabber();
-            selectedBitrate = 256;
             InitializeComponent();
 
             BackColor = back;
@@ -71,7 +69,7 @@ namespace YouTubeAudioExtractormatic
             chkAll.Paint += CheckBoxPaint;
         }
 
-        public void RefreshGui()
+        public void OnProgressChanged()
         {
             InvalidateList();
         }
@@ -90,43 +88,31 @@ namespace YouTubeAudioExtractormatic
 
         private void rb96_CheckedChanged(object sender, EventArgs e)
         {
-            selectedBitrate = 96;
-
             controller.SetBitrate(96);
         }
 
         private void rb128_CheckedChanged(object sender, EventArgs e)
         {
-            selectedBitrate = 128;
-
             controller.SetBitrate(128);
         }
 
         private void rb192_CheckedChanged(object sender, EventArgs e)
         {
-            selectedBitrate = 192;
-
             controller.SetBitrate(192);
         }
 
         private void rb256_CheckedChanged(object sender, EventArgs e)
         {
-            selectedBitrate = 256;
-
             controller.SetBitrate(256);
         }
 
         private void rb320_CheckedChanged(object sender, EventArgs e)
         {
-            selectedBitrate = 320;
-
             controller.SetBitrate(320);
         }
 
         private void rbVideo_CheckedChanged(object sender, EventArgs e)
         {
-            selectedBitrate = 0;
-
             controller.SetBitrate(0);
         }
 

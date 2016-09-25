@@ -12,6 +12,10 @@ namespace YouTubeAudioExtractormatic
     public interface iGui
     {
         MainController controller { get; set; }
-        void RefreshGui();
+
+        /// <summary>
+        /// This should get called whenever the download/conversion progress of a video changes so that the gui knows to refresh
+        /// </summary>
+        void OnProgressChanged();
     }
 }
