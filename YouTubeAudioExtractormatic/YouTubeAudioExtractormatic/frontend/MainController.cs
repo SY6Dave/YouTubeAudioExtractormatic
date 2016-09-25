@@ -13,7 +13,6 @@ namespace YouTubeAudioExtractormatic
     /// </summary>
     public class MainController
     {
-
         private ThreadHandler threadManager;
         private YoutubeGrabber videoRetriever;
         private Downloader videoDownloader;
@@ -27,29 +26,43 @@ namespace YouTubeAudioExtractormatic
             this.videoDownloader = new Downloader(threadManager, callingForm);
 
             this.bitrate = 256;
-
-            callingForm.bitrateChanged = BitrateChanged;
         }
 
-        private void BitrateChanged(uint bitrate)
+        /// <summary>
+        /// Call this from a gui form to update the selected bitrate
+        /// </summary>
+        /// <param name="bitrate">Bitrate in kbps - e.g. 320 for high quality. Use 0 to save as videos instead of converting to audio</param>
+        public void SetBitrate(uint bitrate)
         {
-            Debug.WriteLine(bitrate);
+            if(this.bitrate != bitrate)
+                this.bitrate = bitrate;
         }
 
-        public void Close()
+        /// <summary>
+        /// This should be called when the application is exiting to ensure all threads are safely aborted
+        /// </summary>
+        public void CloseApplication()
         {
             threadManager.AbortAllThreads();
         }
 
-        public void SetBitrate(uint bitrate)
-        {
-            this.bitrate = bitrate;
-        }
-
-        public void InitiateDownload(CheckedListBox.CheckedItemCollection selectedVideos)
+        /// <summary>
+        /// Begin downloading a collection of selected videos
+        /// </summary>
+        /// <param name="selectedVideos">A list of VideoData references that represent individual videos to be downloaded</param>
+        public void Download(List<VideoData> selectedVideos)
         {
             videoDownloader.SetPendingDownloads(selectedVideos, this.bitrate);
-            
+        }
+
+        /// <summary>
+        /// Grab the video information from a particular playlist or search query (* search query to be implemented)
+        /// </summary>
+        /// <param name="query">A valid YouTube video URL, playlist URL or generic search query</param>
+        /// <returns>Returns a list of VideoData references that can then be passed to the Download method of the MainController</returns>
+        public List<VideoData> GetVideos(string query)
+        {
+            return new List<VideoData>();
         }
     }
 }

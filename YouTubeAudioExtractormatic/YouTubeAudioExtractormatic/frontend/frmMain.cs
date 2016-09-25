@@ -14,9 +14,6 @@ namespace YouTubeAudioExtractormatic
 {
     public partial class frmMain : Form, iGui
     {
-        public Action<uint> bitrateChanged { get; set; }
-       // public BitrateChanged bitrateChanged { get; set; }
-
         public MainController controller { get; set; }
 
         public static Color back = Color.FromArgb(66, 59, 76);
@@ -74,6 +71,11 @@ namespace YouTubeAudioExtractormatic
             chkAll.Paint += CheckBoxPaint;
         }
 
+        public void RefreshGui()
+        {
+            InvalidateList();
+        }
+
         private void lblAuthor_Click(object sender, EventArgs e)
         {
             ToolStripLabel lblAuthor = (ToolStripLabel)sender;
@@ -83,49 +85,49 @@ namespace YouTubeAudioExtractormatic
 
         private void frmMain_Closing(object sender, FormClosingEventArgs e)
         {
-            threadHandler.AbortAllThreads();
+            controller.CloseApplication();
         }
 
         private void rb96_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 96;
 
-            bitrateChanged(96);
+            controller.SetBitrate(96);
         }
 
         private void rb128_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 128;
 
-            bitrateChanged(128);
+            controller.SetBitrate(128);
         }
 
         private void rb192_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 192;
 
-            bitrateChanged(192);
+            controller.SetBitrate(192);
         }
 
         private void rb256_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 256;
 
-            bitrateChanged(256);
+            controller.SetBitrate(256);
         }
 
         private void rb320_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 320;
 
-            bitrateChanged(320);
+            controller.SetBitrate(320);
         }
 
         private void rbVideo_CheckedChanged(object sender, EventArgs e)
         {
             selectedBitrate = 0;
 
-            bitrateChanged(0);
+            controller.SetBitrate(0);
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -135,8 +137,14 @@ namespace YouTubeAudioExtractormatic
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            //downloader.BeginDownloadThread(lstVideo.CheckedItems, selectedBitrate);
-            downloader.SetPendingDownloads(lstVideo.CheckedItems, selectedBitrate);
+            List<VideoData> pendingDownloads = new List<VideoData>();
+
+            foreach(var item in lstVideo.CheckedItems)
+            {
+                pendingDownloads.Add((VideoData)item);
+            }
+
+            controller.Download(pendingDownloads);
         }
 
         public void UpdateMsgLbl(string text)
@@ -187,6 +195,8 @@ namespace YouTubeAudioExtractormatic
         {
             chkAll.Checked = false;
             lstVideo.Items.Clear();
+
+            List<VideoData> searchResult = controller.GetVideos(txtUrl.Text);
 
             List<VideoData> retrievedVideos = grabber.GetVideosByPlaylist(txtUrl.Text);
             if (retrievedVideos == null) return;
