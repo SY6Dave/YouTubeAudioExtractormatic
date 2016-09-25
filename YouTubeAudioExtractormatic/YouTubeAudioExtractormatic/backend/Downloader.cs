@@ -91,24 +91,33 @@ namespace YouTubeAudioExtractormatic
                 download.Start();
             }
 
-                //check ffmpeg in right place
-                if (!File.Exists(ffmpegPath))
-                {
-                    //gui.UpdateMsgLbl("ffmpeg.exe not found in lib folder!"); FIX WITH REFACTOR
-                }
+            //check ffmpeg in right place
+            if (!File.Exists(ffmpegPath))
+            {
+                //gui.UpdateMsgLbl("ffmpeg.exe not found in lib folder!"); FIX WITH REFACTOR
+            }
 
             //check if downloads folder is there and try to create it if not
-            if(!Directory.Exists(downloadsPath))
+            try
             {
-                try
-                {
-                    Directory.CreateDirectory(downloadsPath);
-                }
-                catch
-                {
-                    //gui.UpdateMsgLbl("Unable to create downloads directory!"); FIX WITH REFACTOR
-                }
+                VerifyDownloadDirectory();
             }
+            catch
+            {
+                //gui.UpdateMsgLbl("Unable to create downloads directory!"); FIX WITH REFACTOR
+            }
+        }
+
+        private void VerifyDownloadDirectory()
+        {
+            if(!Directory.Exists(downloadsPath))
+                Directory.CreateDirectory(downloadsPath);
+        }
+
+        public void OpenDownloadDirectory()
+        {
+            VerifyDownloadDirectory();
+            System.Diagnostics.Process.Start(downloadsPath);
         }
 
         private void WaitForDownload()

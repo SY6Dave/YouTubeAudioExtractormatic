@@ -64,5 +64,13 @@ namespace YouTubeAudioExtractormatic
         {
             return new List<VideoData>();
         }
+
+        /// <summary>
+        /// Verifies that a downloads folder exists and then tries to open it in Windows Explorer
+        /// </summary>
+        public void OpenDownloadsFolder()
+        {
+            videoDownloader.OpenDownloadDirectory();
+        }
     }
 }

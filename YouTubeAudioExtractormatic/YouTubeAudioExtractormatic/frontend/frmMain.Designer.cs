@@ -47,8 +47,8 @@
             this.btnOpen = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.lstVideo = new YouTubeAudioExtractormatic.ProgressListBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.ssMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -124,9 +124,10 @@
             this.rb96.Name = "rb96";
             this.rb96.Size = new System.Drawing.Size(132, 17);
             this.rb96.TabIndex = 3;
+            this.rb96.Tag = "96";
             this.rb96.Text = "96 kbit/s - Lowest";
             this.rb96.UseVisualStyleBackColor = false;
-            this.rb96.CheckedChanged += new System.EventHandler(this.rb96_CheckedChanged);
+            this.rb96.CheckedChanged += new System.EventHandler(this.BitrateChanged);
             // 
             // rb128
             // 
@@ -141,9 +142,10 @@
             this.rb128.Name = "rb128";
             this.rb128.Size = new System.Drawing.Size(120, 17);
             this.rb128.TabIndex = 4;
+            this.rb128.Tag = "128";
             this.rb128.Text = "128 kbit/s - Low";
             this.rb128.UseVisualStyleBackColor = false;
-            this.rb128.CheckedChanged += new System.EventHandler(this.rb128_CheckedChanged);
+            this.rb128.CheckedChanged += new System.EventHandler(this.BitrateChanged);
             // 
             // rb192
             // 
@@ -158,9 +160,10 @@
             this.rb192.Name = "rb192";
             this.rb192.Size = new System.Drawing.Size(138, 17);
             this.rb192.TabIndex = 5;
+            this.rb192.Tag = "192";
             this.rb192.Text = "192 kbit/s - Medium";
             this.rb192.UseVisualStyleBackColor = false;
-            this.rb192.CheckedChanged += new System.EventHandler(this.rb192_CheckedChanged);
+            this.rb192.CheckedChanged += new System.EventHandler(this.BitrateChanged);
             // 
             // rb256
             // 
@@ -177,9 +180,10 @@
             this.rb256.Size = new System.Drawing.Size(126, 17);
             this.rb256.TabIndex = 6;
             this.rb256.TabStop = true;
+            this.rb256.Tag = "256";
             this.rb256.Text = "256 kbit/s - High";
             this.rb256.UseVisualStyleBackColor = false;
-            this.rb256.CheckedChanged += new System.EventHandler(this.rb256_CheckedChanged);
+            this.rb256.CheckedChanged += new System.EventHandler(this.BitrateChanged);
             // 
             // rb320
             // 
@@ -194,9 +198,10 @@
             this.rb320.Name = "rb320";
             this.rb320.Size = new System.Drawing.Size(144, 17);
             this.rb320.TabIndex = 7;
+            this.rb320.Tag = "320";
             this.rb320.Text = "320 kbit/s - Highest";
             this.rb320.UseVisualStyleBackColor = false;
-            this.rb320.CheckedChanged += new System.EventHandler(this.rb320_CheckedChanged);
+            this.rb320.CheckedChanged += new System.EventHandler(this.BitrateChanged);
             // 
             // lblUrl
             // 
@@ -237,9 +242,10 @@
             this.rbVideo.Name = "rbVideo";
             this.rbVideo.Size = new System.Drawing.Size(102, 17);
             this.rbVideo.TabIndex = 12;
+            this.rbVideo.Tag = "0";
             this.rbVideo.Text = "Save as video";
             this.rbVideo.UseVisualStyleBackColor = false;
-            this.rbVideo.CheckedChanged += new System.EventHandler(this.rbVideo_CheckedChanged);
+            this.rbVideo.CheckedChanged += new System.EventHandler(this.BitrateChanged);
             // 
             // chkAll
             // 
@@ -328,6 +334,20 @@
             this.panel2.Size = new System.Drawing.Size(513, 33);
             this.panel2.TabIndex = 19;
             // 
+            // lstVideo
+            // 
+            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstVideo.CheckOnClick = true;
+            this.lstVideo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstVideo.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstVideo.FormattingEnabled = true;
+            this.lstVideo.IntegralHeight = false;
+            this.lstVideo.Location = new System.Drawing.Point(60, 167);
+            this.lstVideo.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
+            this.lstVideo.Name = "lstVideo";
+            this.lstVideo.Size = new System.Drawing.Size(641, 193);
+            this.lstVideo.TabIndex = 15;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.rbVideo);
@@ -344,20 +364,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(511, 125);
             this.panel1.TabIndex = 19;
-            // 
-            // lstVideo
-            // 
-            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lstVideo.CheckOnClick = true;
-            this.lstVideo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstVideo.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstVideo.FormattingEnabled = true;
-            this.lstVideo.IntegralHeight = false;
-            this.lstVideo.Location = new System.Drawing.Point(60, 167);
-            this.lstVideo.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
-            this.lstVideo.Name = "lstVideo";
-            this.lstVideo.Size = new System.Drawing.Size(641, 193);
-            this.lstVideo.TabIndex = 15;
             // 
             // frmMain
             // 
