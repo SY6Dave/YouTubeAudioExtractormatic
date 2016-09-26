@@ -43,14 +43,8 @@ namespace YouTubeAudioExtractormatic
 
         #endregion
 
-        DownloadManager downloadManager;
         ThreadHandler threadHandler;
         static string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
-        string downloadsPath = Path.Combine(applicationPath, "Downloads");
-        public string DownloadsPath
-        {
-            get { return downloadsPath; }
-        }
         string ffmpegPath = Path.Combine(applicationPath, "lib\\ffmpeg.exe");
         private int downloadProgress;
         public int DownloadProgress
@@ -68,17 +62,17 @@ namespace YouTubeAudioExtractormatic
         }
 
         private iGui gui;
+        private DownloadManager downloadManager;
 
         /// <summary>
         /// Verifies that there is a directory set up for downloads
         /// </summary>
         /// <param name="threadHandler">The main program's thread manager</param>
-        public Downloader(ThreadHandler threadHandler, iGui callingForm)
+        public Downloader(ThreadHandler threadHandler, iGui callingForm, DownloadManager downloadManager)
         {
-            this.downloadManager = new DownloadManager(this, threadHandler);
-
             this.threadHandler = threadHandler;
             this.gui = callingForm;
+            this.downloadManager = downloadManager;
             
             
             //check ffmpeg in right place
@@ -86,40 +80,6 @@ namespace YouTubeAudioExtractormatic
             {
                 gui.DisplayMessage("ffmpeg.exe not found in lib folder!");
             }
-
-            //check if downloads folder is there and try to create it if not
-            try
-            {
-                VerifyDownloadDirectory();
-            }
-            catch
-            {
-                gui.DisplayMessage("Unable to create downloads directory!");
-            }
-        }
-
-        private void VerifyDownloadDirectory()
-        {
-            if(!Directory.Exists(downloadsPath))
-                Directory.CreateDirectory(downloadsPath);
-        }
-
-        public void OpenDownloadDirectory()
-        {
-            VerifyDownloadDirectory();
-            System.Diagnostics.Process.Start(downloadsPath);
-        }
-
-        public void SetPendingDownloads(List<VideoData> videoCollection, uint bitrate)
-        {
-            foreach (var video in videoCollection)
-            {
-                UrlParser urlParser = new UrlParser(video.Url);
-                video.Url = urlParser.Url;
-                video.SetDesiredBirtate(bitrate);
-
-                pendingDownloads.Add(video);
-            }            
         }
 
         public void Download(Download video)
@@ -130,7 +90,7 @@ namespace YouTubeAudioExtractormatic
 
                 try
                 {
-                    downloadLinks = cli.GetAllVideos(video.Url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
+                    downloadLinks = cli.GetAllVideos(video.VideoData.Url).OrderBy(br => -br.AudioBitrate); //sort by highest audio quality
                 }
                 catch (ArgumentException)
                 {
@@ -212,10 +172,10 @@ namespace YouTubeAudioExtractormatic
                             }
                             else
                             {
-                                if (video.DesiredBitrate == 0) //video
+                                if (video.Bitrate == 0) //video
                                 {
                                     video.SetConvertProgress(100);
-                                    string videoPath = Path.Combine(downloadsPath, highestQuality.FullName);
+                                    string videoPath = Path.Combine(downloadManager.DownloadsPath, highestQuality.FullName);
                                     File.Copy(tempbytes.Path, videoPath, true);
 
                                     gui.DisplayMessage("Successful!");
@@ -224,9 +184,9 @@ namespace YouTubeAudioExtractormatic
                                 {
                                     //create temp video file to convert to mp3 and dispose of when done
                                     TimeSpan duration = GetVideoDuration(tempbytes.Path);
-                                    string audioPath = Path.Combine(downloadsPath, highestQuality.FullName + ".mp3");
+                                    string audioPath = Path.Combine(downloadManager.DownloadsPath, highestQuality.FullName + ".mp3");
 
-                                    ToMp3(tempbytes.Path, audioPath, duration, video, video.DesiredBitrate); //convert to mp3
+                                    ToMp3(tempbytes.Path, audioPath, duration, video, video.Bitrate); //convert to mp3
                                 }
                             }
 
@@ -236,8 +196,6 @@ namespace YouTubeAudioExtractormatic
                     }
                 }
             }
-
-            WaitForDownload(); //thread goes back to waiting for another download to begin
         }
 
         /// <summary>
@@ -248,7 +206,7 @@ namespace YouTubeAudioExtractormatic
         /// /// <param name="duration">The duration of the video file. Used to calculate progress</param>
         /// <param name="bitrate">Determines quality of the output mp3. 320kbps = high</param>
         /// <returns>Returns true if the conversion was successful</returns>
-        private bool ToMp3(string videoPath, string audioPath, TimeSpan duration, VideoData videoData, uint bitrate = 320)
+        private bool ToMp3(string videoPath, string audioPath, TimeSpan duration, Download video, uint bitrate = 320)
         {
             //setup an ffmpeg process
             var ffmpeg = new Process
@@ -271,7 +229,7 @@ namespace YouTubeAudioExtractormatic
                 //try to invoke ffmpeg
                 if (!ffmpeg.Start())
                 {
-                    videoData.DownloadFailed = true;
+                    video.DownloadFailed = true;
                     Debug.WriteLine("Unable to start ffmpeg!");
                     return false;
                 }
@@ -290,9 +248,9 @@ namespace YouTubeAudioExtractormatic
                                 TimeSpan timeConverted = TimeSpan.Parse(part.Replace("time=", ""));
                                 double percentage = ((double)timeConverted.Ticks / (double)duration.Ticks) * 100;
 
-                                if (videoData.ConvertProgress != percentage)
+                                if (video.ConvertProgress != percentage)
                                 {
-                                    videoData.SetConvertProgress(percentage);
+                                    video.SetConvertProgress(percentage);
                                     gui.OnProgressChanged();
                                 }
                                 break;
@@ -303,11 +261,11 @@ namespace YouTubeAudioExtractormatic
             }
             catch
             {
-                videoData.DownloadFailed = true;
+                video.DownloadFailed = true;
                 return false; //exception was thrown, conversion failed
             }
 
-            videoData.SetConvertProgress(100);
+            video.SetConvertProgress(100);
             gui.OnProgressChanged();
 
             ffmpeg.Close();

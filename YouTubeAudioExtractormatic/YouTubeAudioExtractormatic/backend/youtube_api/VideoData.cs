@@ -16,7 +16,7 @@ namespace YouTubeAudioExtractormatic
         private string id;
         private string title;
 
-        public string Url { get { return url; } set { url = value; } }
+        public string Url { get { return url; } }
         public string Id { get { return id; } }
         public string Title { get { return title; } }
 

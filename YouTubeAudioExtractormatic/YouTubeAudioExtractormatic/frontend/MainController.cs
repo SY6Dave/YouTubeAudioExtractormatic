@@ -17,9 +17,10 @@ namespace YouTubeAudioExtractormatic
 
         private ThreadHandler threadManager;
         private YoutubeGrabber videoRetriever;
-        private Downloader videoDownloader;
+        private DownloadManager downloadManager;
 
         private uint bitrate;
+        public uint Bitrate { get { return bitrate; } }
 
         /// <summary>
         /// Construct a controller which interfaces with a thread manager, video downloader, and the youtube api to provide the core
@@ -32,7 +33,7 @@ namespace YouTubeAudioExtractormatic
 
             this.threadManager = new ThreadHandler();
             this.videoRetriever = new YoutubeGrabber();
-            this.videoDownloader = new Downloader(threadManager, creator);
+            this.downloadManager = new DownloadManager(threadManager, creator);
 
             this.bitrate = 256;
         }
@@ -58,10 +59,19 @@ namespace YouTubeAudioExtractormatic
         /// <summary>
         /// Begin downloading a collection of selected videos
         /// </summary>
-        /// <param name="selectedVideos">A list of VideoData references that represent individual videos to be downloaded</param>
-        public void Download(List<VideoData> selectedVideos)
+        /// <param name="selectedVideos">A list containing all downloads to begin</param>
+        public void Download(List<Download> selectedVideos)
         {
-            videoDownloader.SetPendingDownloads(selectedVideos, this.bitrate);
+            downloadManager.AddToPending(selectedVideos);
+        }
+
+        /// <summary>
+        /// Begin downloading a single video
+        /// </summary>
+        /// <param name="videoToDownload">The video you want to download</param>
+        public void Download(Download videoToDownload)
+        {
+            downloadManager.AddToPending(videoToDownload);
         }
 
         /// <summary>
@@ -81,7 +91,7 @@ namespace YouTubeAudioExtractormatic
         /// </summary>
         public void OpenDownloadsFolder()
         {
-            videoDownloader.OpenDownloadDirectory();
+            downloadManager.OpenDownloadDirectory();
         }
     }
 }

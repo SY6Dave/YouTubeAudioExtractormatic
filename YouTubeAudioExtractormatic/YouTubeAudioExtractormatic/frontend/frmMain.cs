@@ -82,18 +82,20 @@ namespace YouTubeAudioExtractormatic
             if (searchResult != null)
             foreach (var video in searchResult)
             {
-                lstVideo.Items.Add(video);
+                lstVideo.Items.Add(new Download(video, 0));
             }
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            List<VideoData> pendingDownloads = new List<VideoData>();
+            List<Download> pendingDownloads = new List<Download>();
 
-            //cast checked items to VideoData references
+            //cast checked items to Downloads
             foreach(var item in lstVideo.CheckedItems)
             {
-                pendingDownloads.Add((VideoData)item);
+                Download video = (Download)item;
+                video.SetBitrate(controller.Bitrate);
+                pendingDownloads.Add(video);
             }
 
             controller.Download(pendingDownloads); //call the controller to begin downloading

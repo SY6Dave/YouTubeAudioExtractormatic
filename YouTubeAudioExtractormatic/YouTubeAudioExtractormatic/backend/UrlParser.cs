@@ -6,22 +6,19 @@ using System.Threading.Tasks;
 
 namespace YouTubeAudioExtractormatic
 {
-    public class UrlParser
+    public static class UrlParser
     {
-        private string url;
-        public string Url { get { return url; } }
-
-        public UrlParser(string url)
+        public static string GetFormattedUrl(string url)
         {
-            this.url = InShortFormat(url) ? ParseUrl(url) : url;
+            return InShortFormat(url) ? ParseUrl(url) : url;
         }
 
-        private bool InShortFormat(string url)
+        private static bool InShortFormat(string url)
         {
             return url.Contains("youtu.be/");
         }
 
-        private string ParseUrl(string url)
+        private static string ParseUrl(string url)
         {
             string parsed = "";
 

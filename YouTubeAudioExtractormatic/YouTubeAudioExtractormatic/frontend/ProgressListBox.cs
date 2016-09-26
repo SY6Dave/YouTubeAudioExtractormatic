@@ -32,10 +32,10 @@ namespace YouTubeAudioExtractormatic
 
             if (e.Index < 0 || Items.Count == 0) return;
 
-            VideoData data = (VideoData)Items[e.Index];
+            Download data = (Download)Items[e.Index];
             Rectangle bounds = e.Bounds;
             Graphics g = e.Graphics;
-            string text = data.Title;
+            string text = data.VideoData.Title;
             bool selected = GetItemChecked(e.Index);
             
             bounds.Height -= 4;

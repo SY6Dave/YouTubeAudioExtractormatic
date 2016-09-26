@@ -13,7 +13,7 @@ namespace YouTubeAudioExtractormatic
     public class ExampleCLI : iGui
     {
         public MainController controller { get; set; }
-        VideoData downloading;
+        Download download;
 
         public ExampleCLI()
         {
@@ -27,9 +27,9 @@ namespace YouTubeAudioExtractormatic
             if (retrieved != null)
                 if (retrieved.Count > 0)
             {
-                downloading = retrieved[0];
-                Console.WriteLine("Now downloading: {0}", downloading);
-                controller.Download(new List<VideoData> { downloading });
+                download = new Download(retrieved[0], controller.Bitrate);
+                Console.WriteLine("Now downloading: {0}", download);
+                controller.Download(download);
             }
 
 
@@ -39,9 +39,9 @@ namespace YouTubeAudioExtractormatic
 
         public void OnProgressChanged()
         {
-            Console.WriteLine("Download Progress: {0}%...Conversion Progress: {1}%", downloading.DownloadProgress, downloading.ConvertProgress);
+            Console.WriteLine("Download Progress: {0}%...Conversion Progress: {1}%", download.DownloadProgress, download.ConvertProgress);
 
-            if(downloading.DownloadProgress == 100 && downloading.ConvertProgress == 100)
+            if (download.DownloadProgress == 100 && download.ConvertProgress == 100)
             {
                 Console.WriteLine("\nSuccess!");
                 controller.OpenDownloadsFolder();

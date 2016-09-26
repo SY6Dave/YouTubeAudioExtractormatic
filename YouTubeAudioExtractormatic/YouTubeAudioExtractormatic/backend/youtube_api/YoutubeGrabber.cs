@@ -35,6 +35,7 @@ namespace YouTubeAudioExtractormatic
 
         public List<VideoData> GetVideosByPlaylist(string playlistID)
         {
+            playlistID = UrlParser.GetFormattedUrl(playlistID);
             playlistID = ValidatePlaylistID(playlistID);
 
             List<VideoData> videoDatas = new List<VideoData>();
