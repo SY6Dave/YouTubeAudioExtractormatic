@@ -49,11 +49,19 @@ namespace YouTubeAudioExtractormatic
             }
         }
 
+        /// <summary>
+        /// Queue up a video for downloading
+        /// </summary>
+        /// <param name="video">The video you want to download</param>
         public void AddToPending(Download video)
         {
             pendingDownloads.Add(video);
         }
 
+        /// <summary>
+        /// Queue up a list of videos for downloading
+        /// </summary>
+        /// <param name="videos">The videos you want to download</param>
         public void AddToPending(List<Download> videos)
         {
             foreach(var video in videos)
@@ -62,6 +70,9 @@ namespace YouTubeAudioExtractormatic
             }
         }
 
+        /// <summary>
+        /// Loops the thread forever, looking for videos to download
+        /// </summary>
         private void WaitForDownload()
         {
             for (; ; )
@@ -87,12 +98,18 @@ namespace YouTubeAudioExtractormatic
             }
         }
 
+        /// <summary>
+        /// Check whether or not the download directory exists, and create it if not
+        /// </summary>
         private void VerifyDownloadDirectory()
         {
             if (!Directory.Exists(downloadsPath))
                 Directory.CreateDirectory(downloadsPath);
         }
 
+        /// <summary>
+        /// Open the downloads folder in Windows Explorer
+        /// </summary>
         public void OpenDownloadDirectory()
         {
             VerifyDownloadDirectory();
