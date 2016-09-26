@@ -43,8 +43,8 @@ namespace YouTubeAudioExtractormatic
 
         #endregion
 
+        DownloadManager downloadManager;
         ThreadHandler threadHandler;
-        private List<Thread> downloadThreads;
         static string applicationPath = AppDomain.CurrentDomain.BaseDirectory;
         string downloadsPath = Path.Combine(applicationPath, "Downloads");
         public string DownloadsPath
@@ -69,28 +69,18 @@ namespace YouTubeAudioExtractormatic
 
         private iGui gui;
 
-        private List<VideoData> pendingDownloads;
-        object downloadLocker = new object();
-
         /// <summary>
         /// Verifies that there is a directory set up for downloads
         /// </summary>
         /// <param name="threadHandler">The main program's thread manager</param>
         public Downloader(ThreadHandler threadHandler, iGui callingForm)
         {
+            this.downloadManager = new DownloadManager(this, threadHandler);
+
             this.threadHandler = threadHandler;
             this.gui = callingForm;
-            this.pendingDownloads = new List<VideoData>();
             
-            this.downloadThreads = new List<Thread>();
-            for (int i = 0; i < 4; i++)
-            {
-                Thread download = new Thread(WaitForDownload);
-                downloadThreads.Add(download);
-                threadHandler.AddActive(download);
-                download.Start();
-            }
-
+            
             //check ffmpeg in right place
             if (!File.Exists(ffmpegPath))
             {
@@ -120,33 +110,6 @@ namespace YouTubeAudioExtractormatic
             System.Diagnostics.Process.Start(downloadsPath);
         }
 
-        private void WaitForDownload()
-        {
-            for (; ; )
-            {
-                Debug.WriteLine(Thread.CurrentThread.ManagedThreadId + " thread waiting for download");
-                try
-                {
-                    VideoData video;
-                    lock (downloadLocker)
-                    {
-                        while (pendingDownloads.Count == 0)
-                        {
-                            Thread.Sleep(10);
-                        }
-                        Debug.WriteLine(Thread.CurrentThread.ManagedThreadId + " thread found pending download");
-                        video = pendingDownloads.First();
-                        pendingDownloads.Remove(video);
-                    }
-                    Download(video);
-                }
-                catch (ThreadAbortException)
-                {
-                    return;
-                }
-            }
-        }
-
         public void SetPendingDownloads(List<VideoData> videoCollection, uint bitrate)
         {
             foreach (var video in videoCollection)
@@ -159,7 +122,7 @@ namespace YouTubeAudioExtractormatic
             }            
         }
 
-        private void Download(VideoData video)
+        public void Download(Download video)
         {
             using (var cli = Client.For(new YouTube())) //use a libvideo client to get video metadata
             {

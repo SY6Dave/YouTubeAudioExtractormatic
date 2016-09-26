@@ -91,8 +91,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="backend\Download.cs" />
     <Compile Include="backend\Downloader.cs" />
     <Compile Include="backend\UrlParser.cs" />
+    <Compile Include="backend\DownloadManager.cs" />
     <Compile Include="backend\youtube_api\VideoData.cs" />
     <Compile Include="backend\youtube_api\YoutubeGrabber.cs" />
     <Compile Include="ExampleCLI.cs" />

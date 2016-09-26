@@ -9,11 +9,15 @@ namespace YouTubeAudioExtractormatic
 {
     public class DownloadManager
     {
-        private List<VideoData> pendingDownloads;
+        object pendingLocker = new object();
+        private List<Download> pendingDownloads;
+        private Downloader downloader;
 
-        public DownloadManager(ThreadHandler threadHandler)
+
+        public DownloadManager(Downloader downloader, ThreadHandler threadHandler)
         {
-            this.pendingDownloads = new List<VideoData>();
+            this.downloader = downloader;
+            this.pendingDownloads = new List<Download>();
             
             for(int i = 0; i < 4; i++)
             {
@@ -23,12 +27,12 @@ namespace YouTubeAudioExtractormatic
             }
         }
 
-        public void AddToPending(VideoData video)
+        public void AddToPending(Download video)
         {
             pendingDownloads.Add(video);
         }
 
-        public void AddToPending(List<VideoData> videos)
+        public void AddToPending(List<Download> videos)
         {
             foreach(var video in videos)
             {
@@ -42,8 +46,8 @@ namespace YouTubeAudioExtractormatic
             {
                 try
                 {
-                    VideoData video;
-                    lock (downloadLocker)
+                    Download video;
+                    lock (pendingLocker)
                     {
                         while (pendingDownloads.Count == 0)
                         {
@@ -52,7 +56,7 @@ namespace YouTubeAudioExtractormatic
                         video = pendingDownloads.First();
                         pendingDownloads.Remove(video);
                     }
-                    Download(video);
+                    downloader.Download(video);
                 }
                 catch (ThreadAbortException)
                 {
