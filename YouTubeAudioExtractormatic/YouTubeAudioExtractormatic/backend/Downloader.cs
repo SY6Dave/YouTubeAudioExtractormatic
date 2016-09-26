@@ -156,7 +156,7 @@ namespace YouTubeAudioExtractormatic
                 video.SetDesiredBirtate(bitrate);
 
                 pendingDownloads.Add(video);
-            }
+            }            
         }
 
         private void Download(VideoData video)
