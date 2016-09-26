@@ -14,9 +14,11 @@ namespace YouTubeAudioExtractormatic
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+           // Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new frmMain());
+
+            ExampleCLI cli = new ExampleCLI();
         }
     }
 }

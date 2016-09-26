@@ -13,6 +13,8 @@ namespace YouTubeAudioExtractormatic
     /// </summary>
     public class MainController
     {
+        private iGui creator;
+
         private ThreadHandler threadManager;
         private YoutubeGrabber videoRetriever;
         private Downloader videoDownloader;
@@ -26,6 +28,8 @@ namespace YouTubeAudioExtractormatic
         /// <param name="creator">Normally, "this". Pass in a reference to the form/console that has implemented the iGui interface</param>
         public MainController(iGui creator)
         {
+            this.creator = creator;
+
             this.threadManager = new ThreadHandler();
             this.videoRetriever = new YoutubeGrabber();
             this.videoDownloader = new Downloader(threadManager, creator);
@@ -67,7 +71,9 @@ namespace YouTubeAudioExtractormatic
         /// <returns>Returns a list of VideoData references that can then be passed to the Download method of the MainController</returns>
         public List<VideoData> GetVideos(string query)
         {
-            return videoRetriever.GetVideosByPlaylist(query);
+            List<VideoData> retrieved = videoRetriever.GetVideosByPlaylist(query);
+            if (retrieved == null) creator.DisplayMessage("Unable to retrieve videos - invalid search query.");
+            return retrieved;
         }
 
         /// <summary>

@@ -23,9 +23,11 @@ namespace YouTubeAudioExtractormatic
             controller.SetBitrate(Convert.ToUInt16(Console.ReadLine()));
             Console.Write("Enter a video URL: ");
             List<VideoData> retrieved = controller.GetVideos(Console.ReadLine());
-            downloading = retrieved[0];
-            if(retrieved.Count > 0)
+
+            if (retrieved != null)
+                if (retrieved.Count > 0)
             {
+                downloading = retrieved[0];
                 Console.WriteLine("Now downloading: {0}", downloading);
                 controller.Download(new List<VideoData> { downloading });
             }
