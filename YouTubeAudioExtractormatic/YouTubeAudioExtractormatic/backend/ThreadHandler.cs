@@ -42,6 +42,19 @@ namespace YouTubeAudioExtractormatic
             if (activeThreads.Contains(t)) activeThreads.Remove(t);
         }
 
+        public void RemoveActive(int id)
+        {
+            for(int i = 0; i < activeThreads.Count; i++)
+            {
+                var thread = activeThreads[i];
+                if(thread.ManagedThreadId == id)
+                {
+                    RemoveActive(thread);
+                    break;
+                }
+            }
+        }
+
         /// <summary>
         /// Iterate through all active threads and stop them individually
         /// </summary>

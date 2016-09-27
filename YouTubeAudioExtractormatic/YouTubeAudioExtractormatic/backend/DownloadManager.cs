@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,12 @@ namespace YouTubeAudioExtractormatic
         public string DownloadsPath { get { return downloadsPath; } }
 
         object pendingLocker = new object();
+        object activeLocker = new object();
         private List<Download> pendingDownloads;
+        private List<Download> activeDownloads;
         private Downloader downloader;
+
+        ThreadHandler threadHandler;
 
         /// <summary>
         /// Construct a DownloadManager which can add pending downloads, and create threads to start downloading them
@@ -28,12 +33,15 @@ namespace YouTubeAudioExtractormatic
         /// /// <param name="applicationInterface">The frontend interface of the application</param>
         public DownloadManager(ThreadHandler threadHandler, iGui applicationInterface)
         {
+            this.threadHandler = threadHandler;
             this.downloader = new Downloader(threadHandler, applicationInterface, this);
             this.pendingDownloads = new List<Download>();
+            this.activeDownloads = new List<Download>();
             
             for(int i = 0; i < 4; i++)
             {
                 Thread listener = new Thread(WaitForDownload);
+                listener.Name = String.Format("{0} listener created by constructor", i);
                 threadHandler.AddActive(listener);
                 listener.Start();
             }
@@ -55,6 +63,11 @@ namespace YouTubeAudioExtractormatic
         /// <param name="video">The video you want to download</param>
         public void AddToPending(Download video)
         {
+            video.Completed = false;
+            video.DownloadFailed = false;
+            video.SetDownloadProgress(0);
+            video.SetConvertProgress(0);
+
             pendingDownloads.Add(video);
         }
 
@@ -77,6 +90,7 @@ namespace YouTubeAudioExtractormatic
         {
             for (; ; )
             {
+                Debug.WriteLine(String.Format("WAITING FOR PENDING DOWNLOAD: {0}", Thread.CurrentThread.Name));
                 try
                 {
                     Download video;
@@ -88,13 +102,60 @@ namespace YouTubeAudioExtractormatic
                         }
                         video = pendingDownloads.First();
                         pendingDownloads.Remove(video);
+                        activeDownloads.Add(video);
                     }
+                    video.SetThread(Thread.CurrentThread);
                     downloader.Download(video);
                 }
                 catch (ThreadAbortException)
                 {
                     return;
                 }
+            }
+        }
+
+        public void CancelDownload(Download video)
+        {
+            if(!video.Completed && activeDownloads.Contains(video))
+            {
+                int threadID = video.DownloadThread != null ? video.DownloadThread.ManagedThreadId : -1;
+                while (video.DownloadThread != null && video.DownloadThread.IsAlive)
+                {
+                    Debug.WriteLine("Attempting download termination");
+
+                    if (video.DownloadThread != null)
+                        video.DownloadThread.Abort();
+                }
+
+
+                threadHandler.RemoveActive(threadID);
+                activeDownloads.Remove(video);
+                Debug.WriteLine("Download terminated");
+
+                Thread listener = new Thread(WaitForDownload);
+                listener.Name = String.Format("Re-listener: {0}", video.VideoData.Title);
+                threadHandler.AddActive(listener);
+                listener.Start();
+            } 
+        }
+
+        public void CancelAllDownloads()
+        {
+            lock(activeLocker)
+            {
+                for(int i = 0; i < activeDownloads.Count; i++)
+                {
+                    CancelDownload(activeDownloads[i]);
+                    i--;
+                }
+            }
+        }
+
+        public void RemoveActive(Download video)
+        {
+            lock(activeLocker)
+            {
+                activeDownloads.Remove(video);
             }
         }
 

@@ -95,6 +95,7 @@ namespace YouTubeAudioExtractormatic
                 catch (ArgumentException)
                 {
                     video.DownloadFailed = true;
+                    downloadManager.RemoveActive(video);
                     //invalid url
                     gui.DisplayMessage("Invalid URL!");
 
@@ -111,7 +112,9 @@ namespace YouTubeAudioExtractormatic
                 catch
                 {
                     video.DownloadFailed = true;
+                    downloadManager.RemoveActive(video);
                     gui.DisplayMessage("Unable to download video");
+                    gui.OnProgressChanged();
                     return;
                 }
 
@@ -157,6 +160,7 @@ namespace YouTubeAudioExtractormatic
                                 catch
                                 {
                                     video.DownloadFailed = true;
+                                    downloadManager.RemoveActive(video);
                                     //thread aborted
                                     return;
                                 }
@@ -166,6 +170,7 @@ namespace YouTubeAudioExtractormatic
                             if (bytes.Length != len)
                             {
                                 video.DownloadFailed = true;
+                                downloadManager.RemoveActive(video);
                                 gui.DisplayMessage("File content is corrupted!");
                                 threadHandler.RemoveActive(Thread.CurrentThread);
                                 Thread.CurrentThread.Abort();
@@ -196,6 +201,8 @@ namespace YouTubeAudioExtractormatic
                     }
                 }
             }
+
+            downloadManager.RemoveActive(video);
         }
 
         /// <summary>
@@ -262,6 +269,7 @@ namespace YouTubeAudioExtractormatic
             catch
             {
                 video.DownloadFailed = true;
+                downloadManager.RemoveActive(video);
                 return false; //exception was thrown, conversion failed
             }
 

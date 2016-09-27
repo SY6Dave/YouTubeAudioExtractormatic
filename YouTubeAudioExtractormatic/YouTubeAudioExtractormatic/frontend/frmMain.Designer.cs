@@ -47,8 +47,8 @@
             this.btnOpen = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.lstVideo = new YouTubeAudioExtractormatic.ProgressListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lstVideo = new YouTubeAudioExtractormatic.ProgressListBox();
             this.ssMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -334,20 +334,6 @@
             this.panel2.Size = new System.Drawing.Size(513, 33);
             this.panel2.TabIndex = 19;
             // 
-            // lstVideo
-            // 
-            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lstVideo.CheckOnClick = true;
-            this.lstVideo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstVideo.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstVideo.FormattingEnabled = true;
-            this.lstVideo.IntegralHeight = false;
-            this.lstVideo.Location = new System.Drawing.Point(60, 167);
-            this.lstVideo.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
-            this.lstVideo.Name = "lstVideo";
-            this.lstVideo.Size = new System.Drawing.Size(641, 193);
-            this.lstVideo.TabIndex = 15;
-            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.rbVideo);
@@ -364,6 +350,20 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(511, 125);
             this.panel1.TabIndex = 19;
+            // 
+            // lstVideo
+            // 
+            this.lstVideo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstVideo.CheckOnClick = true;
+            this.lstVideo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstVideo.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstVideo.FormattingEnabled = true;
+            this.lstVideo.IntegralHeight = false;
+            this.lstVideo.Location = new System.Drawing.Point(60, 167);
+            this.lstVideo.Margin = new System.Windows.Forms.Padding(60, 3, 60, 3);
+            this.lstVideo.Name = "lstVideo";
+            this.lstVideo.Size = new System.Drawing.Size(641, 193);
+            this.lstVideo.TabIndex = 15;
             // 
             // frmMain
             // 

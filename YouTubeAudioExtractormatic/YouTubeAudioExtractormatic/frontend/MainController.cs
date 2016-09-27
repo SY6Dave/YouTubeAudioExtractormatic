@@ -93,5 +93,17 @@ namespace YouTubeAudioExtractormatic
         {
             downloadManager.OpenDownloadDirectory();
         }
+
+        public void CancelDownload(Download video)
+        {
+            downloadManager.CancelDownload(video);
+            creator.OnProgressChanged();
+        }
+
+        public void CancelAllDownloads()
+        {
+            downloadManager.CancelAllDownloads();
+            creator.OnProgressChanged();
+        }
     }
 }

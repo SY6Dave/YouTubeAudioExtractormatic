@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -96,6 +97,8 @@ namespace YouTubeAudioExtractormatic
                 video.SetBitrate(controller.Bitrate);
                 controller.Download(video);
                 lstVideo.SetItemChecked(lstVideo.Items.IndexOf(lstVideo.CheckedItems[0]), false);
+
+                test = video;
             }
         }
 
@@ -205,6 +208,17 @@ namespace YouTubeAudioExtractormatic
             rbVideo.Paint += RadioButtonPaint;
 
             chkAll.Paint += CheckBoxPaint;
+        }
+
+        Download test;
+        private void button1_Click(object sender, EventArgs e)
+        {
+            controller.CancelDownload(test);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            controller.CancelAllDownloads();
         }
     }
 }
