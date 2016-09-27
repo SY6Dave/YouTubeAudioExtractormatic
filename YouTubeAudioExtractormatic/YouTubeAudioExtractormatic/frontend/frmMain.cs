@@ -90,15 +90,13 @@ namespace YouTubeAudioExtractormatic
         {
             List<Download> pendingDownloads = new List<Download>();
 
-            //cast checked items to Downloads
-            foreach(var item in lstVideo.CheckedItems)
+            while(lstVideo.CheckedItems.Count > 0)
             {
-                Download video = (Download)item;
+                Download video = (Download)lstVideo.CheckedItems[0];
                 video.SetBitrate(controller.Bitrate);
-                pendingDownloads.Add(video);
+                controller.Download(video);
+                lstVideo.SetItemChecked(lstVideo.Items.IndexOf(lstVideo.CheckedItems[0]), false);
             }
-
-            controller.Download(pendingDownloads); //call the controller to begin downloading
         }
 
         public void DisplayMessage(string msg)
