@@ -44,10 +44,10 @@ namespace YouTubeAudioExtractormatic
 
         public void RemoveActive(int id)
         {
-            for(int i = 0; i < activeThreads.Count; i++)
+            for (int i = 0; i < activeThreads.Count; i++)
             {
                 var thread = activeThreads[i];
-                if(thread.ManagedThreadId == id)
+                if (thread.ManagedThreadId == id)
                 {
                     RemoveActive(thread);
                     break;
@@ -60,7 +60,7 @@ namespace YouTubeAudioExtractormatic
         /// </summary>
         public void AbortAllThreads()
         {
-            foreach(Thread t in activeThreads)
+            foreach (Thread t in activeThreads)
             {
                 t.Abort();
             }
@@ -69,9 +69,9 @@ namespace YouTubeAudioExtractormatic
             Thread.Sleep(100); //sleep to make sure they've all returned, and check if any are still active
             bool allAborted = true;
 
-            foreach(Thread t in activeThreads)
+            foreach (Thread t in activeThreads)
             {
-                if(t.IsAlive)
+                if (t.IsAlive)
                 {
                     allAborted = false;
                     break;

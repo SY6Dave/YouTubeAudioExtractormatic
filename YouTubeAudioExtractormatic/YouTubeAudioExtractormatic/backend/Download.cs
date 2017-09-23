@@ -25,21 +25,27 @@ namespace YouTubeAudioExtractormatic
         public double DownloadProgress { get { return downloadProgress; } }
         public double ConvertProgress { get { return convertProgress; } }
         public uint Bitrate { get { return bitrate; } }
-        public bool DownloadFailed { get { return downloadFailed; }
+        public bool DownloadFailed
+        {
+            get { return downloadFailed; }
             set
             {
                 downloadFailed = value;
-                if(value == true)
+                if (value == true)
                     downloadThread = null;
-            } }
-        public bool Completed { get { return completed; }
+            }
+        }
+        public bool Completed
+        {
+            get { return completed; }
             set
             {
                 completed = value;
-                
-                if(value == true)
+
+                if (value == true)
                     downloadThread = null;
-            } }
+            }
+        }
         public Thread DownloadThread { get { return downloadThread; } }
 
         /// <summary>

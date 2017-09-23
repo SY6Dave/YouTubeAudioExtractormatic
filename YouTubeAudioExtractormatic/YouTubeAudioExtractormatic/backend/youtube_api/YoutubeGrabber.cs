@@ -51,7 +51,7 @@ namespace YouTubeAudioExtractormatic
                 try
                 {
                     var response = request.Execute();
-                    foreach(var video in response.Items)
+                    foreach (var video in response.Items)
                     {
                         VideoData currVideo = new VideoData(video.ContentDetails.VideoId, video.Snippet.Title);
                         videoDatas.Add(currVideo);
@@ -106,7 +106,7 @@ namespace YouTubeAudioExtractormatic
             if (!playlistID.Contains("list=")) return playlistID;
 
             string id = playlistID.Remove(0, playlistID.IndexOf("list=") + 5);
-            if(id.Contains("&"))
+            if (id.Contains("&"))
             {
                 int index = id.IndexOf("&");
                 id = id.Remove(index, id.Length - index);

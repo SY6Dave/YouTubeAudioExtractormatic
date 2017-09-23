@@ -81,17 +81,27 @@ namespace YouTubeAudioExtractormatic
 
             //add videos to list
             if (searchResult != null)
-            foreach (var video in searchResult)
-            {
-                lstVideo.Items.Add(new Download(video, 0));
-            }
+                foreach (var video in searchResult)
+                {
+                    lstVideo.Items.Add(new Download(video, 0));
+                }
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
             List<Download> pendingDownloads = new List<Download>();
+            foreach (var item in lstVideo.CheckedItems)
+            {
+                var length = Path.Combine(controller.DownloadsPath, item.ToString()).Length;
+                if (length >= 240)
+                {
+                    lblMsg.Text = "One or more file paths exceeds the maximum number of characters.";
+                    lstVideo.ClearSelected();
+                    return;
+                }
+            }
 
-            while(lstVideo.CheckedItems.Count > 0)
+            while (lstVideo.CheckedItems.Count > 0)
             {
                 Download video = (Download)lstVideo.CheckedItems[0];
                 video.SetBitrate(controller.Bitrate);
@@ -140,7 +150,7 @@ namespace YouTubeAudioExtractormatic
             {
                 controller.OpenDownloadsFolder();
             }
-            catch(UnauthorizedAccessException)
+            catch (UnauthorizedAccessException)
             {
                 lblMsg.Text = "Unable to create downloads directory! - Unathorized Access";
             }
@@ -185,6 +195,7 @@ namespace YouTubeAudioExtractormatic
 
             txtUrl.BackColor = light;
             btnOpen.BackColor = light;
+            btnLocation.BackColor = light;
 
             btnOpen.ForeColor = lighter;
             lblUrl.ForeColor = lighter;
@@ -196,6 +207,7 @@ namespace YouTubeAudioExtractormatic
             rb320.ForeColor = lighter;
             rbVideo.ForeColor = lighter;
             btnOpen.ForeColor = lighter;
+            btnLocation.ForeColor = lighter;
             lblMsg.ForeColor = lighter;
             lblAuthor.ForeColor = lighter;
             lblAuthor.LinkColor = lighter;
@@ -219,6 +231,18 @@ namespace YouTubeAudioExtractormatic
         private void button2_Click(object sender, EventArgs e)
         {
             controller.CancelAllDownloads();
+        }
+
+        private void btnLocation_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    controller.SetPath(dialog.SelectedPath);
+                }
+            }
         }
     }
 }

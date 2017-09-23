@@ -37,8 +37,8 @@ namespace YouTubeAudioExtractormatic
             this.downloader = new Downloader(threadHandler, applicationInterface, this);
             this.pendingDownloads = new List<Download>();
             this.activeDownloads = new List<Download>();
-            
-            for(int i = 0; i < 4; i++)
+
+            for (int i = 0; i < 4; i++)
             {
                 Thread listener = new Thread(WaitForDownload);
                 listener.Name = String.Format("{0} listener created by constructor", i);
@@ -77,7 +77,7 @@ namespace YouTubeAudioExtractormatic
         /// <param name="videos">The videos you want to download</param>
         public void AddToPending(List<Download> videos)
         {
-            foreach(var video in videos)
+            foreach (var video in videos)
             {
                 AddToPending(video);
             }
@@ -116,7 +116,7 @@ namespace YouTubeAudioExtractormatic
 
         public void CancelDownload(Download video)
         {
-            if(!video.Completed && activeDownloads.Contains(video))
+            if (!video.Completed && activeDownloads.Contains(video))
             {
                 int threadID = video.DownloadThread != null ? video.DownloadThread.ManagedThreadId : -1;
                 while (video.DownloadThread != null && video.DownloadThread.IsAlive)
@@ -136,14 +136,14 @@ namespace YouTubeAudioExtractormatic
                 listener.Name = String.Format("Re-listener: {0}", video.VideoData.Title);
                 threadHandler.AddActive(listener);
                 listener.Start();
-            } 
+            }
         }
 
         public void CancelAllDownloads()
         {
-            lock(activeLocker)
+            lock (activeLocker)
             {
-                for(int i = 0; i < activeDownloads.Count; i++)
+                for (int i = 0; i < activeDownloads.Count; i++)
                 {
                     CancelDownload(activeDownloads[i]);
                     i--;
@@ -153,7 +153,7 @@ namespace YouTubeAudioExtractormatic
 
         public void RemoveActive(Download video)
         {
-            lock(activeLocker)
+            lock (activeLocker)
             {
                 activeDownloads.Remove(video);
             }
@@ -175,6 +175,11 @@ namespace YouTubeAudioExtractormatic
         {
             VerifyDownloadDirectory();
             System.Diagnostics.Process.Start(downloadsPath);
+        }
+
+        internal void SetPath(string p)
+        {
+            downloadsPath = p;
         }
     }
 }

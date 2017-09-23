@@ -52,7 +52,7 @@ namespace YouTubeAudioExtractormatic
             get { return downloadProgress; }
             set
             {
-                if(value != downloadProgress)
+                if (value != downloadProgress)
                 {
                     downloadProgress = value;
                     OnPropertyChanged("DownloadProgress");
@@ -73,8 +73,8 @@ namespace YouTubeAudioExtractormatic
             this.threadHandler = threadHandler;
             this.gui = callingForm;
             this.downloadManager = downloadManager;
-            
-            
+
+
             //check ffmpeg in right place
             if (!File.Exists(ffmpegPath))
             {
@@ -82,7 +82,7 @@ namespace YouTubeAudioExtractormatic
             }
         }
 
-        public void Download(Download video)
+        public async void Download(Download video)
         {
             using (var cli = Client.For(new YouTube())) //use a libvideo client to get video metadata
             {
@@ -119,7 +119,8 @@ namespace YouTubeAudioExtractormatic
                 }
 
                 //setup http web request to get video bytes
-                var request = (HttpWebRequest)HttpWebRequest.Create(highestQuality.Uri);
+                var asyncRequest = await highestQuality.GetUriAsync();
+                var request = (HttpWebRequest)HttpWebRequest.Create(Convert.ToString(asyncRequest));
                 request.AllowAutoRedirect = true;
                 request.Method = "GET";
                 request.Proxy = HttpWebRequest.DefaultWebProxy;
@@ -189,7 +190,9 @@ namespace YouTubeAudioExtractormatic
                                 {
                                     //create temp video file to convert to mp3 and dispose of when done
                                     TimeSpan duration = GetVideoDuration(tempbytes.Path);
-                                    string audioPath = Path.Combine(downloadManager.DownloadsPath, highestQuality.FullName + ".mp3");
+
+                                    string mp3Name = highestQuality.FullName + ".mp3";
+                                    string audioPath = Path.Combine(downloadManager.DownloadsPath, mp3Name);
 
                                     ToMp3(tempbytes.Path, audioPath, duration, video, video.Bitrate); //convert to mp3
                                 }
@@ -218,7 +221,7 @@ namespace YouTubeAudioExtractormatic
             //setup an ffmpeg process
             var ffmpeg = new Process
             {
-                StartInfo = { UseShellExecute = false, RedirectStandardError = true, FileName = ffmpegPath , CreateNoWindow = true}
+                StartInfo = { UseShellExecute = false, RedirectStandardError = true, FileName = ffmpegPath, CreateNoWindow = true }
             };
 
             var arguments =
@@ -245,12 +248,12 @@ namespace YouTubeAudioExtractormatic
                 while ((line = reader.ReadLine()) != null)
                 {
                     //get the line saying the time - use this to calculate percentage
-                    if(line.Contains("time="))
+                    if (line.Contains("time="))
                     {
                         string[] lineSplit = line.Split(' ');
-                        foreach(string part in lineSplit)
+                        foreach (string part in lineSplit)
                         {
-                            if(part.Contains("time="))
+                            if (part.Contains("time="))
                             {
                                 TimeSpan timeConverted = TimeSpan.Parse(part.Replace("time=", ""));
                                 double percentage = ((double)timeConverted.Ticks / (double)duration.Ticks) * 100;
@@ -275,8 +278,22 @@ namespace YouTubeAudioExtractormatic
 
             video.SetConvertProgress(100);
             gui.OnProgressChanged();
-
             ffmpeg.Close();
+
+            using (StreamWriter sw = new StreamWriter("output.txt", append: true))
+            {
+
+                if (File.Exists(audioPath))
+                {
+                    sw.WriteLine("File successfully created - filename length: " + audioPath.Length);
+                }
+                else
+                {
+                    sw.WriteLine("Error, file not created - filename length: " + audioPath.Length);
+                }
+
+                sw.Flush();
+            }
 
             return true;
         }

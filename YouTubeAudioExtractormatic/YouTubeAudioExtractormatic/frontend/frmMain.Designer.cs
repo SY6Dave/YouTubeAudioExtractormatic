@@ -45,6 +45,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblMsg = new System.Windows.Forms.Label();
             this.btnOpen = new System.Windows.Forms.Button();
+            this.btnLocation = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -300,6 +301,21 @@
             this.btnOpen.UseVisualStyleBackColor = false;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
+            // btnLocation
+            // 
+            this.btnLocation.BackColor = System.Drawing.Color.Gray;
+            this.btnLocation.FlatAppearance.BorderSize = 0;
+            this.btnLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLocation.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLocation.ForeColor = System.Drawing.Color.White;
+            this.btnLocation.Location = new System.Drawing.Point(87, 65);
+            this.btnLocation.Name = "btnLocation";
+            this.btnLocation.Size = new System.Drawing.Size(69, 23);
+            this.btnLocation.TabIndex = 17;
+            this.btnLocation.Text = "Set Path";
+            this.btnLocation.UseVisualStyleBackColor = false;
+            this.btnLocation.Click += new System.EventHandler(this.btnLocation_Click);
+            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
@@ -339,6 +355,7 @@
             this.panel1.Controls.Add(this.rbVideo);
             this.panel1.Controls.Add(this.btnDownload);
             this.panel1.Controls.Add(this.btnOpen);
+            this.panel1.Controls.Add(this.btnLocation);
             this.panel1.Controls.Add(this.rb96);
             this.panel1.Controls.Add(this.rb128);
             this.panel1.Controls.Add(this.lblMsg);
@@ -414,9 +431,9 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblMsg;
         private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.Button btnLocation;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel1;
     }
 }
-

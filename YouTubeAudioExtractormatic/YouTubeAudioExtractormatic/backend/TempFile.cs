@@ -44,13 +44,13 @@ namespace YouTubeAudioExtractormatic
         public void Dispose() { Dispose(true); }
         private void Dispose(bool disposing)
         {
-            if(disposing)
+            if (disposing)
             {
                 GC.SuppressFinalize(this);
             }
 
             //delete file
-            if(path != null)
+            if (path != null)
             {
                 try { File.Delete(path); }
                 catch { }

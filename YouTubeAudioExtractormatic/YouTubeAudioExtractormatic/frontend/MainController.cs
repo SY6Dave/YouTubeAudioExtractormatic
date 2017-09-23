@@ -21,6 +21,7 @@ namespace YouTubeAudioExtractormatic
 
         private uint bitrate;
         public uint Bitrate { get { return bitrate; } }
+        public string DownloadsPath { get { return downloadManager.DownloadsPath; } }
 
         /// <summary>
         /// Construct a controller which interfaces with a thread manager, video downloader, and the youtube api to provide the core
@@ -44,7 +45,7 @@ namespace YouTubeAudioExtractormatic
         /// <param name="bitrate">Bitrate in kbps - e.g. 320 for high quality. Use 0 to save as videos instead of converting to audio</param>
         public void SetBitrate(uint bitrate)
         {
-            if(this.bitrate != bitrate)
+            if (this.bitrate != bitrate)
                 this.bitrate = bitrate;
         }
 
@@ -104,6 +105,11 @@ namespace YouTubeAudioExtractormatic
         {
             downloadManager.CancelAllDownloads();
             creator.OnProgressChanged();
+        }
+
+        internal void SetPath(string p)
+        {
+            downloadManager.SetPath(p);
         }
     }
 }
